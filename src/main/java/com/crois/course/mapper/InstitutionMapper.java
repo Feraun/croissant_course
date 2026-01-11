@@ -1,6 +1,6 @@
 package com.crois.course.mapper;
 
-import com.crois.course.dto.InstitutionDTO.CreateInstitutionRequestDTO;
+import com.crois.course.dto.InstitutionDTO.InstitutionRequestDTO;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseDTO;
 import com.crois.course.entity.InstitutionEntity;
 import org.mapstruct.Mapper;
@@ -12,7 +12,7 @@ public interface InstitutionMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "city", ignore = true)
     @Mapping(target = "categories", ignore = true)
-    InstitutionEntity createEntityFromDTO(CreateInstitutionRequestDTO dto);
+    InstitutionEntity createEntityFromDTO(InstitutionRequestDTO dto);
 
 
     InstitutionResponseDTO createDtoFromEntity(InstitutionEntity institution);

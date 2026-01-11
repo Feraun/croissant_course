@@ -27,7 +27,12 @@ public class JwtUserDetailsService implements UserDetailsService {
                 .id(user.getId())
                 .username(user.getUsername())
                 .password(user.getPassword().getPassword())
-                .authorities(List.of(new SimpleGrantedAuthority(user.getRoles().toString())))
+                .authorities(
+                        user.getRoles().stream()
+                                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+                                .toList()
+                )
+
 
                 .enabled(user.isEnabled())
                 .build();

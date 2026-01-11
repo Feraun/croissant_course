@@ -3,8 +3,8 @@ package com.crois.course.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -30,8 +30,11 @@ public class InstitutionEntity {
     )
     private List<CategoryInstitutionEntity> categories = new ArrayList<>();
 
+    @Column(name = "city_id", nullable = false)
+    private Long cityId;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "city_id", nullable = false)
+    @JoinColumn(name = "city_id", insertable = false, updatable = false)
     private CityEntity city;
 
     private String address;
@@ -40,7 +43,7 @@ public class InstitutionEntity {
 
     private String contactNumber;
 
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @OneToMany(
             mappedBy = "institution",

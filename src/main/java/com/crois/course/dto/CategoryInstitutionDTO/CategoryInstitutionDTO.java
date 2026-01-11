@@ -1,6 +1,6 @@
 package com.crois.course.dto.CategoryInstitutionDTO;
 
-public record CategoryInstitionDTO(
+public record CategoryInstitutionDTO(
         String name,
         String description
 ) {

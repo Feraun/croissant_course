@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "categoriesOfInstitution")
@@ -24,5 +25,5 @@ public class CategoryInstitutionEntity {
     private String description;
 
     @ManyToMany(mappedBy = "categories")
-    private ArrayList<InstitutionEntity> institutions = new ArrayList<>();
+    private List<InstitutionEntity> institutions = new ArrayList<>();
 }
