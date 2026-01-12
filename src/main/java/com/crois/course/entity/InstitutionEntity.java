@@ -30,6 +30,8 @@ public class InstitutionEntity {
     )
     private List<CategoryInstitutionEntity> categories = new ArrayList<>();
 
+    private List<Long> managers = new ArrayList<>();
+
     @Column(name = "city_id", nullable = false)
     private Long cityId;
 
@@ -52,5 +54,5 @@ public class InstitutionEntity {
     )
     private  List<BoxEntity> boxes = new ArrayList<>();
 
-    //todo лист менеджеров
+
 }

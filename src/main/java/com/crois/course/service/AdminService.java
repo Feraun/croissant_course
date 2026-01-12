@@ -103,6 +103,7 @@ public class AdminService {
         );
     }
 
+
     public CategoryInstitutionDTO createCategoryInstitution(@RequestBody CategoryInstitutionDTO categoryInstitutionDTO){
         CategoryInstitutionEntity categoryInstitutionEntity = categoryInstitutionMapper.createEntityFromDTO(categoryInstitutionDTO);
         categoryInstitutionRepository.save(categoryInstitutionEntity);
@@ -203,6 +204,7 @@ public class AdminService {
         institutionEntity.setAddress(institutionRequestDTO.address());
         institutionEntity.setCategories(categoryInstitutionRepository.findAllById(institutionRequestDTO.categoryIds()));
         institutionEntity.setContactNumber(institutionRequestDTO.contactNumber());
+        institutionEntity.setManagers(institutionRequestDTO.managersIds());
 
         //todo придумать алгоритм расчета рейтинга на основе отзывов
         institutionEntity.setRating(institutionRequestDTO.rating());
@@ -264,4 +266,7 @@ public class AdminService {
         }
         return "Not found or access denied";
     }
+
+    //todo editUser
+    //todo deleteUser
 }

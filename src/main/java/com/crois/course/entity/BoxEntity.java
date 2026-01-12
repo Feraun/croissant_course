@@ -27,10 +27,13 @@ public class BoxEntity {
     @Column(name = "status", nullable = false)
     private BoxStatus boxStatus;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "institution_id", nullable = false)
     private InstitutionEntity institution;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id") // ← ВОТ ГЛАВНОЕ
+    private UserEntity owner;
 
     //todo доделать ProductEntity
 }

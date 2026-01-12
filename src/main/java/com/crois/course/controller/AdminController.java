@@ -11,7 +11,6 @@ import com.crois.course.dto.PageParams;
 import com.crois.course.dto.PageResult;
 import com.crois.course.service.AdminService;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

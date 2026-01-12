@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class UserEntity {
     @JsonIgnore
     private PasswordEntity password;
 
-    //todo List<BoxEntity> boxes;
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private List<BoxEntity> history_of_boxes = new ArrayList<>();
 
 }

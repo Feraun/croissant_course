@@ -42,6 +42,13 @@ public class SecurityConfig {
                         .requestMatchers("/api/admin/**")
                         .hasAnyRole("ADMIN")
 
+                        .requestMatchers("/api/client/**")
+                        .hasAnyRole("ADMIN", "CLIENT")
+
+                        .requestMatchers("/api/manager/**")
+                        .hasAnyRole("ADMIN", "MANAGER")
+
+
                         .anyRequest().authenticated())
 
                 // Send a 401 error response if user is not authentic.

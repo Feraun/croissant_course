@@ -8,5 +8,6 @@ public record InstitutionRequestDTO(
         String address,
         Double rating,
         String contactNumber,
-        List<Long> categoryIds
+        List<Long> categoryIds,
+        List<Long> managersIds
 ) { }
