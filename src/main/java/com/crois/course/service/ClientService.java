@@ -116,9 +116,6 @@ public class ClientService {
     @Transactional
     public BoxShortResponseDTO buyBox(@PathVariable("institutionId") Long institutionId, @PathVariable("boxId") Long boxId, Authentication authentication){
 
-        //todo при покупке меняем статус на paid и добавляем бокс в историю покупок клиента
-
-
         BoxEntity boxEntity = boxRepository.findByIdAndInstitutionId(boxId, institutionId).orElseThrow();
 
         boxEntity.setBoxStatus(BoxStatus.PAID);

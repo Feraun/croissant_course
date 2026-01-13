@@ -2,6 +2,7 @@ package com.crois.course.mapper;
 
 import com.crois.course.dto.BoxDTO.BoxShortResponseDTO;
 import com.crois.course.dto.BoxDTO.CreateBoxDTO;
+import com.crois.course.dto.BoxDTO.RandomBoxResponseDTO;
 import com.crois.course.entity.BoxEntity;
 import com.crois.course.entity.BoxStatus;
 import org.mapstruct.AfterMapping;
@@ -20,6 +21,8 @@ public interface BoxMapper {
 
 
     BoxShortResponseDTO createShortDtoFromEntity(BoxEntity boxEntity);
+
+    RandomBoxResponseDTO createManagersDtoFromEntity(BoxEntity boxEntity);
 
     @AfterMapping
     default void setRoleForNewBox(@MappingTarget BoxEntity box) {

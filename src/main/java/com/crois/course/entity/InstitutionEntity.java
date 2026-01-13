@@ -30,7 +30,14 @@ public class InstitutionEntity {
     )
     private List<CategoryInstitutionEntity> categories = new ArrayList<>();
 
-    private List<Long> managers = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(
+            name = "institution_managers",
+            joinColumns = @JoinColumn(name = "institution_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<UserEntity> managers = new ArrayList<>();
+    ;
 
     @Column(name = "city_id", nullable = false)
     private Long cityId;

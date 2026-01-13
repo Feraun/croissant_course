@@ -32,7 +32,7 @@ public class BoxEntity {
     private InstitutionEntity institution;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id") // ← ВОТ ГЛАВНОЕ
+    @JoinColumn(name = "user_id")
     private UserEntity owner;
 
     //todo доделать ProductEntity

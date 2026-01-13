@@ -13,10 +13,7 @@ import com.crois.course.mapper.BoxMapper;
 import com.crois.course.mapper.CategoryInstitutionMapper;
 import com.crois.course.mapper.CityMapper;
 import com.crois.course.mapper.InstitutionMapper;
-import com.crois.course.repositories.BoxRepository;
-import com.crois.course.repositories.CategoryInstitutionRepository;
-import com.crois.course.repositories.CityRepository;
-import com.crois.course.repositories.InstitutionRepository;
+import com.crois.course.repositories.*;
 import com.crois.course.service.SearchService.CriteriaFilter;
 import com.crois.course.service.SearchService.CriteriaSearchUtil;
 import jakarta.persistence.EntityManager;
@@ -50,6 +47,8 @@ public class AdminService {
 
     private final BoxMapper boxMapper;
     private final BoxRepository boxRepository;
+
+    private final UserRepository userRepository;
 
     public CityDTO createCity(@RequestBody CityDTO cityDTO){
         CityEntity cityEntity = cityMapper.createEntityFromDTO(cityDTO);
@@ -183,10 +182,9 @@ public class AdminService {
 
         InstitutionEntity institutionEntity = institutionMapper.createEntityFromDTO(institutionRequestDTO);
 
-        //institutionEntity.setCity(cityRepository.getReferenceById(createInstitutionRequestDTO.cityId()));
+        institutionEntity.setCategories(categoryInstitutionRepository.findAllById(institutionRequestDTO.categoryIds()));
 
-        List<CategoryInstitutionEntity> categories = categoryInstitutionRepository.findAllById(institutionRequestDTO.categoryIds());
-        institutionEntity.setCategories(categories);
+        institutionEntity.setManagers(userRepository.findAllById(institutionRequestDTO.managersIds()));
 
         institutionEntity.setCreatedAt(LocalDateTime.now());
 
@@ -204,7 +202,7 @@ public class AdminService {
         institutionEntity.setAddress(institutionRequestDTO.address());
         institutionEntity.setCategories(categoryInstitutionRepository.findAllById(institutionRequestDTO.categoryIds()));
         institutionEntity.setContactNumber(institutionRequestDTO.contactNumber());
-        institutionEntity.setManagers(institutionRequestDTO.managersIds());
+        institutionEntity.setManagers(userRepository.findAllById(institutionRequestDTO.managersIds()));
 
         //todo придумать алгоритм расчета рейтинга на основе отзывов
         institutionEntity.setRating(institutionRequestDTO.rating());

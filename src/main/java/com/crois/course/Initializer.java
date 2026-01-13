@@ -29,5 +29,14 @@ public class Initializer {
 
         userRepository.save(admin);
 
+        UserEntity manager = UserEntity.builder()
+                .username("manager")
+                .enabled(true)
+                .roles(List.of(Role.MANAGER))
+                .createdAt(new Date())
+                .password(new PasswordEntity("1234"))
+                .build();
+
+        userRepository.save(manager);
     }
 }
