@@ -37,12 +37,6 @@ public class ClientService {
     @PersistenceContext
     private EntityManager em;
 
-    private final CityMapper cityMapper;
-    private final CityRepository cityRepository;
-
-    private final CategoryInstitutionMapper categoryInstitutionMapper;
-    private final CategoryInstitutionRepository categoryInstitutionRepository;
-
     private final InstitutionMapper institutionMapper;
     private final InstitutionRepository institutionRepository;
 
@@ -50,32 +44,6 @@ public class ClientService {
     private final BoxRepository boxRepository;
 
     private final UserRepository userRepository;
-
-
-
-    public PageResult<CategoryInstitutionDTO> searchCategoryOfInstitution(String name, PageParams params){
-
-        List<CriteriaFilter<CategoryInstitutionEntity>> filters = List.of(
-                (cb, root, predicates) -> {
-                    if (name != null && !name.isBlank()) {
-                        predicates.add(
-                                cb.like(
-                                        cb.lower(root.get("name")),
-                                        "%" + name.toLowerCase() + "%"
-                                )
-                        );
-                    }
-                }
-        );
-
-        return CriteriaSearchUtil.search(
-                em,
-                CategoryInstitutionEntity.class,
-                filters,
-                params,
-                categoryInstitutionMapper::createDtoFromEntity
-        );
-    }
 
     public PageResult<InstitutionResponseClient> searchInstitution(String name, PageParams params){
 

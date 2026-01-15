@@ -27,7 +27,7 @@ public class BoxEntity {
     @Column(name = "status", nullable = false)
     private BoxStatus boxStatus;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "institution_id", nullable = false)
     private InstitutionEntity institution;
 

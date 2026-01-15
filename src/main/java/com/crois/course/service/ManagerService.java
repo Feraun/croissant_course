@@ -6,16 +6,11 @@ import com.crois.course.dto.PageParams;
 import com.crois.course.dto.PageResult;
 import com.crois.course.dto.UserDTO.AuthUser;
 import com.crois.course.entity.BoxEntity;
-import com.crois.course.entity.CityEntity;
 import com.crois.course.entity.InstitutionEntity;
 import com.crois.course.entity.UserEntity;
 import com.crois.course.mapper.BoxMapper;
-import com.crois.course.mapper.CategoryInstitutionMapper;
-import com.crois.course.mapper.CityMapper;
 import com.crois.course.mapper.InstitutionMapper;
 import com.crois.course.repositories.BoxRepository;
-import com.crois.course.repositories.CategoryInstitutionRepository;
-import com.crois.course.repositories.CityRepository;
 import com.crois.course.repositories.InstitutionRepository;
 import com.crois.course.service.SearchService.CriteriaFilter;
 import com.crois.course.service.SearchService.CriteriaSearchUtil;
@@ -24,7 +19,6 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.Join;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,13 +35,6 @@ public class ManagerService {
     @PersistenceContext
     private EntityManager em;
 
-    private final CityMapper cityMapper;
-    private final CityRepository cityRepository;
-
-    private final CategoryInstitutionMapper categoryInstitutionMapper;
-    private final CategoryInstitutionRepository categoryInstitutionRepository;
-
-    private final InstitutionMapper institutionMapper;
     private final InstitutionRepository institutionRepository;
 
     private final BoxMapper boxMapper;

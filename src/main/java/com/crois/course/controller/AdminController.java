@@ -9,19 +9,24 @@ import com.crois.course.dto.InstitutionDTO.InstitutionRequestDTO;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseDTO;
 import com.crois.course.dto.PageParams;
 import com.crois.course.dto.PageResult;
-import com.crois.course.service.AdminService;
+import com.crois.course.service.AdminServices.AdminBoxService;
+import com.crois.course.service.AdminServices.AdminCategoryService;
+import com.crois.course.service.AdminServices.AdminCityService;
+import com.crois.course.service.AdminServices.AdminInstitutionService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/admin/")
+@AllArgsConstructor
 public class AdminController {
 
-    private final AdminService adminService;
+    private final AdminCityService adminCityService;
+    private final AdminCategoryService adminCategoryService;
+    private final AdminInstitutionService adminInstitutionService;
+    private final AdminBoxService adminBoxService;
 
-    public AdminController(AdminService adminService){
-        this.adminService = adminService;
-    }
 
     @GetMapping("/cities")
     public PageResult<CityDTO> getAllCity(
@@ -38,27 +43,27 @@ public class AdminController {
                 direction.equalsIgnoreCase("asc")
         );
 
-        return adminService.searchCity(name, params);
+        return adminCityService.searchCity(name, params);
     }
 
     @PostMapping(value = "cities/createCity", produces = MediaType.APPLICATION_JSON_VALUE)
     public CityDTO createCity(@RequestBody CityDTO cityDTO){
-        return (adminService.createCity(cityDTO));
+        return (adminCityService.createCity(cityDTO));
     }
 
     @PatchMapping(value = "cities/editCity/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CityDTO editCity(@PathVariable("id") Long id, @RequestBody CityDTO cityDTO){
-        return (adminService.editCity(id, cityDTO));
+        return (adminCityService.editCity(id, cityDTO));
     }
 
     @GetMapping(value = "cities/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CityDTO getCityById(@PathVariable("id") Long id){
-        return (adminService.getCityById(id));
+        return (adminCityService.getCityById(id));
     }
 
     @DeleteMapping(value = "cities/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public String deleteCityById(@PathVariable("id") Long id){
-        return (adminService.deleteCityById(id));
+        return (adminCityService.deleteCityById(id));
     }
 
 
@@ -77,27 +82,27 @@ public class AdminController {
                 direction.equalsIgnoreCase("asc")
         );
 
-        return adminService.searchCategoryOfInstitution(name, params);
+        return adminCategoryService.searchCategoryOfInstitution(name, params);
     }
 
     @PostMapping(value = "categoriesOfInstitution/createCategory", produces = MediaType.APPLICATION_JSON_VALUE)
     public CategoryInstitutionDTO createCategoryInstitution(@RequestBody CategoryInstitutionDTO categoryInstitutionDTO){
-        return (adminService.createCategoryInstitution(categoryInstitutionDTO));
+        return (adminCategoryService.createCategoryInstitution(categoryInstitutionDTO));
     }
 
     @PatchMapping(value = "categoriesOfInstitution/editCategory/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CategoryInstitutionDTO editCategoryInstitution(@PathVariable("id") Long id, @RequestBody CategoryInstitutionDTO categoryInstitutionDTO){
-        return (adminService.editCategoryInstitution(id, categoryInstitutionDTO));
+        return (adminCategoryService.editCategoryInstitution(id, categoryInstitutionDTO));
     }
 
     @GetMapping(value = "categoriesOfInstitution/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CategoryInstitutionDTO editCategoryInstitution(@PathVariable("id") Long id){
-        return (adminService.getByIdCategoryInstitution(id));
+        return (adminCategoryService.getByIdCategoryInstitution(id));
     }
 
     @DeleteMapping(value = "categoriesOfInstitution/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String deleteCategoryInstitution(@PathVariable("id") Long id){
-        return (adminService.deleteByIdCategoryInstitution(id));
+    public Long deleteCategoryInstitution(@PathVariable("id") Long id){
+        return (adminCategoryService.deleteByIdCategoryInstitution(id));
     }
 
     @GetMapping("/institutions")
@@ -115,46 +120,48 @@ public class AdminController {
                 direction.equalsIgnoreCase("asc")
         );
 
-        return adminService.searchInstitution(name, params);
+        return adminInstitutionService.searchInstitution(name, params);
     }
 
     @PostMapping(value = "institutions/createInstitution", produces = MediaType.APPLICATION_JSON_VALUE)
     public InstitutionResponseDTO createInstitution(@RequestBody InstitutionRequestDTO InstitutionRequestDTO){
-        return (adminService.createInstitution(InstitutionRequestDTO));
+        return (adminInstitutionService.createInstitution(InstitutionRequestDTO));
     }
 
     @PatchMapping(value = "institutions/editInstitution/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public InstitutionResponseDTO editInstitution(@PathVariable("id") Long id, @RequestBody InstitutionRequestDTO institutionRequestDTO){
-        return (adminService.editInstitution(id, institutionRequestDTO));
+        return (adminInstitutionService.editInstitution(id, institutionRequestDTO));
     }
 
     @GetMapping(value = "institutions/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public InstitutionResponseDTO getInstitutionById(@PathVariable("id") Long id){
-        return (adminService.getInstitutionById(id));
+        return (adminInstitutionService.getInstitutionById(id));
     }
 
     @DeleteMapping(value = "institutions/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String deleteInstitutionById(@PathVariable("id") Long id){
-        return (adminService.deleteInstitutionById(id));
+    public Long deleteInstitutionById(@PathVariable("id") Long id){
+        return (adminInstitutionService.deleteInstitutionById(id));
     }
 
     @PostMapping(value = "institutions/{institutionId}/createBox", produces = MediaType.APPLICATION_JSON_VALUE)
     public CreateBoxDTO createBox(@PathVariable("institutionId") Long institutionId, @RequestBody CreateBoxDTO createBoxDTO){
-        return adminService.createBox(institutionId, createBoxDTO);
+        return adminBoxService.createBox(institutionId, createBoxDTO);
     }
 
     @PatchMapping(value = "institutions/{institutionId}/editBox/{boxId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CreateBoxDTO editBox(@PathVariable("institutionId") Long institutionId, @PathVariable("boxId") Long boxId, @RequestBody CreateBoxDTO createBoxDTO){
-        return adminService.editBox(institutionId, boxId, createBoxDTO);
+        return adminBoxService.editBox(institutionId, boxId, createBoxDTO);
     }
 
     @GetMapping(value = "institutions/{institutionId}/boxes/{boxId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public BoxShortResponseDTO getBoxById(@PathVariable("institutionId") Long institutionId, @PathVariable("boxId") Long boxId){
-        return adminService.getBoxById(institutionId, boxId);
+        return adminBoxService.getBoxById(institutionId, boxId);
     }
 
     @DeleteMapping(value = "institutions/{institutionId}/boxes/{boxId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String deleteBoxById(@PathVariable("institutionId") Long institutionId, @PathVariable("boxId") Long boxId){
-        return adminService.deleteBoxById(institutionId, boxId);
+    public Long deleteBoxById(@PathVariable("institutionId") Long institutionId, @PathVariable("boxId") Long boxId){
+        return adminBoxService.deleteBoxById(institutionId, boxId);
     }
+
+
 }

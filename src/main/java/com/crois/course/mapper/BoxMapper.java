@@ -17,6 +17,7 @@ public interface BoxMapper {
     @Mapping(target = "boxStatus", ignore = true)
     BoxEntity createEntityFromDtoForNewBox(CreateBoxDTO createBoxDTO);
 
+    @Mapping(target = "institutionId", source="institution.id")
     CreateBoxDTO createDtoFromEntity(BoxEntity boxEntity);
 
 
