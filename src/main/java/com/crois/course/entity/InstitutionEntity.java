@@ -22,7 +22,7 @@ public class InstitutionEntity {
 
     private String name;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "institution_categories",
             joinColumns = @JoinColumn(name = "institution_id"),
@@ -30,7 +30,7 @@ public class InstitutionEntity {
     )
     private List<CategoryInstitutionEntity> categories = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "institution_managers",
             joinColumns = @JoinColumn(name = "institution_id"),
@@ -57,7 +57,8 @@ public class InstitutionEntity {
     @OneToMany(
             mappedBy = "institution",
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
     )
     private  List<BoxEntity> boxes = new ArrayList<>();
 

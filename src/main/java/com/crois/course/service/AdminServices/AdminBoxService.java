@@ -55,7 +55,6 @@ public class AdminBoxService {
     }
 
     public BoxShortResponseDTO getBoxById(@PathVariable("institutionId") Long institutionId, @PathVariable("boxId") Long boxId){
-
         return boxRepository.findByIdAndInstitutionId(boxId, institutionId)
                 .map(boxMapper::createShortDtoFromEntity)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Box not found"));

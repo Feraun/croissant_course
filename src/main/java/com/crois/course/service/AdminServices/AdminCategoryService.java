@@ -48,7 +48,8 @@ public class AdminCategoryService {
     }
 
     public CategoryInstitutionDTO getByIdCategoryInstitution(@PathVariable("id") Long id){
-        return (categoryInstitutionMapper.createDtoFromEntity(categoryInstitutionRepository.findById(id).orElseThrow()));
+        CategoryInstitutionEntity categoryInstitutionEntity = categoryInstitutionRepository.findById(id).orElseThrow();
+        return (categoryInstitutionMapper.createDtoFromEntity(categoryInstitutionEntity));
     }
 
     public Long deleteByIdCategoryInstitution(@PathVariable("id") Long id){

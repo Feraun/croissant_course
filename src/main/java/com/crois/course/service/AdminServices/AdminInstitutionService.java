@@ -4,7 +4,9 @@ import com.crois.course.dto.InstitutionDTO.InstitutionRequestDTO;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseDTO;
 import com.crois.course.dto.PageParams;
 import com.crois.course.dto.PageResult;
+import com.crois.course.entity.CategoryInstitutionEntity;
 import com.crois.course.entity.InstitutionEntity;
+import com.crois.course.entity.UserEntity;
 import com.crois.course.mapper.InstitutionMapper;
 import com.crois.course.repositories.CategoryInstitutionRepository;
 import com.crois.course.repositories.InstitutionRepository;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -63,16 +66,23 @@ public class AdminInstitutionService {
 
         InstitutionEntity institutionEntity = institutionMapper.createEntityFromDTO(institutionRequestDTO);
 
-        institutionEntity.setCategories(categoryInstitutionRepository.findAllById(institutionRequestDTO.categoryIds()));
+        List<CategoryInstitutionEntity> categoryInstitutionEntityList = institutionRequestDTO.categoryIds().stream()
+                        .map(categoryInstitutionRepository::getReferenceById)
+                        .toList();
 
-        institutionEntity.setManagers(userRepository.findAllById(institutionRequestDTO.managersIds()));
+        institutionEntity.setCategories(categoryInstitutionEntityList);
+
+        List<UserEntity> userEntityList = institutionRequestDTO.managersIds().stream()
+                .map(userRepository::getReferenceById)
+                .toList();
+
+        institutionEntity.setManagers(userEntityList);
 
         institutionEntity.setCreatedAt(LocalDateTime.now());
 
         institutionRepository.save(institutionEntity);
 
         return institutionMapper.createDtoFromEntity(institutionEntity);
-
     }
 
     public InstitutionResponseDTO editInstitution(@PathVariable("id") Long id, @RequestBody InstitutionRequestDTO institutionRequestDTO){
@@ -82,14 +92,19 @@ public class AdminInstitutionService {
         institutionEntity.setCityId(institutionRequestDTO.cityId());
         institutionEntity.setAddress(institutionRequestDTO.address());
 
+        List<CategoryInstitutionEntity> categoryInstitutionEntityList = institutionRequestDTO.categoryIds().stream()
+                .map(categoryInstitutionRepository::getReferenceById)
+                .toList();
 
-        //todo map? надо разбивать список по одному айди и добавлять в список категорий
-//        institutionEntity.setCategories(categoryInstitutionRepository.findAllById(institutionRequestDTO.categoryIds()));
+        institutionEntity.setCategories(categoryInstitutionEntityList);
 
         institutionEntity.setContactNumber(institutionRequestDTO.contactNumber());
 
-        //todo map? надо разбивать список по одному айди и добавлять в список менеджеров
-//        institutionEntity.setManagers(userRepository.getReferenceById(institutionRequestDTO.managersIds()));
+        List<UserEntity> userEntityList = institutionRequestDTO.managersIds().stream()
+                .map(userRepository::getReferenceById)
+                .toList();
+
+        institutionEntity.setManagers(userEntityList);
 
         //todo придумать алгоритм расчета рейтинга на основе отзывов
         institutionEntity.setRating(institutionRequestDTO.rating());
@@ -97,7 +112,6 @@ public class AdminInstitutionService {
         institutionRepository.save(institutionEntity);
 
         return(institutionMapper.createDtoFromEntity(institutionEntity));
-
     }
 
     public InstitutionResponseDTO getInstitutionById(@PathVariable("id") Long id){
