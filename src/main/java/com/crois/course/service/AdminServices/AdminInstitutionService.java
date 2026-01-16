@@ -38,6 +38,7 @@ public class AdminInstitutionService {
 
     private final CategoryInstitutionRepository categoryInstitutionRepository;
 
+    //todo написать кастомный поиск заведений с joinom категорий для карточек на фронте
     public PageResult<InstitutionResponseDTO> searchInstitution(String name, PageParams params){
 
         List<CriteriaFilter<InstitutionEntity>> filters = List.of(
@@ -67,8 +68,8 @@ public class AdminInstitutionService {
         InstitutionEntity institutionEntity = institutionMapper.createEntityFromDTO(institutionRequestDTO);
 
         List<CategoryInstitutionEntity> categoryInstitutionEntityList = institutionRequestDTO.categoryIds().stream()
-                        .map(categoryInstitutionRepository::getReferenceById)
-                        .toList();
+                .map(categoryInstitutionRepository::getReferenceById)
+                .toList();
 
         institutionEntity.setCategories(categoryInstitutionEntityList);
 
@@ -94,7 +95,7 @@ public class AdminInstitutionService {
 
         List<CategoryInstitutionEntity> categoryInstitutionEntityList = institutionRequestDTO.categoryIds().stream()
                 .map(categoryInstitutionRepository::getReferenceById)
-                .toList();
+                .collect(Collectors.toList());
 
         institutionEntity.setCategories(categoryInstitutionEntityList);
 
@@ -102,7 +103,7 @@ public class AdminInstitutionService {
 
         List<UserEntity> userEntityList = institutionRequestDTO.managersIds().stream()
                 .map(userRepository::getReferenceById)
-                .toList();
+                .collect(Collectors.toList());
 
         institutionEntity.setManagers(userEntityList);
 
@@ -123,4 +124,6 @@ public class AdminInstitutionService {
         return (id);
     }
 
+    //todo editUser
+    //todo deleteUser
 }

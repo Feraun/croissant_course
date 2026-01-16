@@ -31,7 +31,7 @@ public class BoxEntity {
     @JoinColumn(name = "institution_id", nullable = false)
     private InstitutionEntity institution;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "user_id")
     private UserEntity owner;
 

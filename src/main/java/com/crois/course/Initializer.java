@@ -32,7 +32,7 @@ public class Initializer {
         UserEntity manager = UserEntity.builder()
                 .username("manager")
                 .enabled(true)
-                .roles(List.of(Role.MANAGER))
+                .roles(List.of(Role.MANAGER, Role.CLIENT))
                 .createdAt(new Date())
                 .password(new PasswordEntity("1234"))
                 .build();

@@ -9,7 +9,6 @@ import com.crois.course.entity.BoxEntity;
 import com.crois.course.entity.InstitutionEntity;
 import com.crois.course.entity.UserEntity;
 import com.crois.course.mapper.BoxMapper;
-import com.crois.course.mapper.InstitutionMapper;
 import com.crois.course.repositories.BoxRepository;
 import com.crois.course.repositories.InstitutionRepository;
 import com.crois.course.service.SearchService.CriteriaFilter;
@@ -60,7 +59,6 @@ public class ManagerService {
                 HttpStatus.FORBIDDEN,
                 "Пользователь не является менеджером этого учреждения"
         );
-
     }
 
     public PageResult<RandomBoxResponseDTO> getAllBox(String name, PageParams params, Authentication authentication){
@@ -86,7 +84,6 @@ public class ManagerService {
                     Join<InstitutionEntity, UserEntity> managerJoin = institutionJoin.join("managers");
 
                     predicates.add(cb.equal(managerJoin.get("id"), authUser.getId()));
-
                 }
         );
 
@@ -97,7 +94,5 @@ public class ManagerService {
                 params,
                 boxMapper::createManagersDtoFromEntity
         );
-
     }
-
 }

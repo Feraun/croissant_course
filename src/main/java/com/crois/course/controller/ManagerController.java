@@ -46,6 +46,4 @@ public class ManagerController {
 
         return managerService.getAllBox(name, params, authentication);
     }
-
-
 }

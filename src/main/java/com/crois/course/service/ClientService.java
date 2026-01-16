@@ -1,7 +1,6 @@
 package com.crois.course.service;
 
 import com.crois.course.dto.BoxDTO.BoxShortResponseDTO;
-import com.crois.course.dto.CategoryInstitutionDTO.CategoryInstitutionDTO;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseClient;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseDTO;
 import com.crois.course.dto.PageParams;
@@ -9,8 +8,6 @@ import com.crois.course.dto.PageResult;
 import com.crois.course.dto.UserDTO.AuthUser;
 import com.crois.course.entity.*;
 import com.crois.course.mapper.BoxMapper;
-import com.crois.course.mapper.CategoryInstitutionMapper;
-import com.crois.course.mapper.CityMapper;
 import com.crois.course.mapper.InstitutionMapper;
 import com.crois.course.repositories.*;
 import com.crois.course.service.SearchService.CriteriaFilter;
@@ -19,11 +16,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.apache.catalina.User;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
@@ -74,7 +68,6 @@ public class ClientService {
     }
 
     public BoxShortResponseDTO getBoxById(@PathVariable("institutionId") Long institutionId, @PathVariable("boxId") Long boxId){
-
         return boxRepository.findByIdAndInstitutionId(boxId, institutionId)
                 .map(boxMapper::createShortDtoFromEntity)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Box not found"));
@@ -96,13 +89,12 @@ public class ClientService {
         user.getHistory_of_boxes().add(boxEntity);
 
         return boxMapper.createShortDtoFromEntity(boxEntity);
-
     }
 
 
     //todo доделать историю заказов
-//    public List<BoxShortResponseDTO> getHistory(Authentication authentication){
-//        AuthUser authUser = (AuthUser) authentication.getPrincipal();
-//        return userRepository.findUserBoxHistory(authUser.getId());
-//    }
+    //    public List<BoxShortResponseDTO> getHistory(Authentication authentication){
+    //        AuthUser authUser = (AuthUser) authentication.getPrincipal();
+    //        return userRepository.findUserBoxHistory(authUser.getId());
+    //    }
 }
