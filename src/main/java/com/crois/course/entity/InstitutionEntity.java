@@ -6,6 +6,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "institutions")
@@ -61,6 +62,10 @@ public class InstitutionEntity {
             fetch = FetchType.LAZY
     )
     private  List<BoxEntity> boxes = new ArrayList<>();
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id", nullable = false)
+    private ImageEntity logo;
 
 
 }

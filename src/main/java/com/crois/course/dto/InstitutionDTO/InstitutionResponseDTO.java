@@ -15,5 +15,6 @@ public record InstitutionResponseDTO(
         String contactNumber,
         Date createdAt,
         List<CategoryInstitutionDTO> categories,
-        List<BoxShortResponseDTO> boxes
+        List<BoxShortResponseDTO> boxes,
+        String logoImage
 ) { }

@@ -17,5 +17,6 @@ public interface InstitutionMapper {
 
     InstitutionResponseClient createDtoForClient(InstitutionEntity institution);
 
+    @Mapping(target = "logoImage", source = "logo.id")
     InstitutionResponseDTO createDtoFromEntity(InstitutionEntity institution);
 }

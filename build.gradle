@@ -49,6 +49,8 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     runtimeOnly 'org.postgresql:postgresql'
+
+    implementation("io.minio:minio:8.6.0")
 }
 
 tasks.named('test') {

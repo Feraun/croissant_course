@@ -7,6 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+import java.util.UUID;
+
 public interface InstitutionRepository extends JpaRepository<InstitutionEntity, Long> {
 
     @Query("SELECT CASE WHEN COUNT(i) > 0 THEN true ELSE false END " +
@@ -14,4 +17,5 @@ public interface InstitutionRepository extends JpaRepository<InstitutionEntity, 
             "WHERE i.id = :institutionId AND m.id = :managerId")
     boolean existsByIdAndManagerId(@Param("institutionId") Long institutionId,
                                    @Param("managerId") Long managerId);
+
 }

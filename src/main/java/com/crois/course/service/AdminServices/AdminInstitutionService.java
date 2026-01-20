@@ -5,12 +5,14 @@ import com.crois.course.dto.InstitutionDTO.InstitutionResponseDTO;
 import com.crois.course.dto.PageParams;
 import com.crois.course.dto.PageResult;
 import com.crois.course.entity.CategoryInstitutionEntity;
+import com.crois.course.entity.ImageEntity;
 import com.crois.course.entity.InstitutionEntity;
 import com.crois.course.entity.UserEntity;
 import com.crois.course.mapper.InstitutionMapper;
 import com.crois.course.repositories.CategoryInstitutionRepository;
 import com.crois.course.repositories.InstitutionRepository;
 import com.crois.course.repositories.UserRepository;
+import com.crois.course.service.MinioService;
 import com.crois.course.service.SearchService.CriteriaFilter;
 import com.crois.course.service.SearchService.CriteriaSearchUtil;
 import jakarta.persistence.EntityManager;
@@ -19,9 +21,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,8 +42,10 @@ public class AdminInstitutionService {
 
     private final CategoryInstitutionRepository categoryInstitutionRepository;
 
+    private final MinioService minioService;
+
     //todo написать кастомный поиск заведений с joinom категорий для карточек на фронте
-    public PageResult<InstitutionResponseDTO> searchInstitution(String name, PageParams params){
+    public PageResult<InstitutionResponseDTO> searchInstitution(String name, PageParams params ){
 
         List<CriteriaFilter<InstitutionEntity>> filters = List.of(
                 (cb, root, predicates) -> {
@@ -63,7 +69,7 @@ public class AdminInstitutionService {
         );
     }
 
-    public InstitutionResponseDTO createInstitution(InstitutionRequestDTO institutionRequestDTO){
+    public InstitutionResponseDTO createInstitution(InstitutionRequestDTO institutionRequestDTO, MultipartFile multipartFile) throws Exception {
 
         InstitutionEntity institutionEntity = institutionMapper.createEntityFromDTO(institutionRequestDTO);
 
@@ -81,7 +87,18 @@ public class AdminInstitutionService {
 
         institutionEntity.setCreatedAt(LocalDateTime.now());
 
+        ImageEntity imageEntity = ImageEntity.builder()
+                .id(UUID.randomUUID())
+                .size(multipartFile.getSize())
+                .httpContentType(multipartFile.getContentType())
+                .build();
+
+
+        institutionEntity.setLogo(imageEntity);
+
         institutionRepository.save(institutionEntity);
+
+        minioService.save(multipartFile, imageEntity.getId());
 
         return institutionMapper.createDtoFromEntity(institutionEntity);
     }
@@ -124,6 +141,9 @@ public class AdminInstitutionService {
         return (id);
     }
 
+
+
     //todo editUser
     //todo deleteUser
 }
+

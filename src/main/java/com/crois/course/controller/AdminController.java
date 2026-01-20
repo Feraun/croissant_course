@@ -9,13 +9,21 @@ import com.crois.course.dto.InstitutionDTO.InstitutionRequestDTO;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseDTO;
 import com.crois.course.dto.PageParams;
 import com.crois.course.dto.PageResult;
-import com.crois.course.service.AdminServices.AdminBoxService;
-import com.crois.course.service.AdminServices.AdminCategoryService;
-import com.crois.course.service.AdminServices.AdminCityService;
-import com.crois.course.service.AdminServices.AdminInstitutionService;
+import com.crois.course.service.AdminServices.*;
 import lombok.AllArgsConstructor;
-import org.springframework.http.MediaType;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import static org.springframework.http.HttpHeaders.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
+
 
 @RestController
 @RequestMapping("/api/admin/")
@@ -124,8 +132,8 @@ public class AdminController {
     }
 
     @PostMapping(value = "institutions/createInstitution", produces = MediaType.APPLICATION_JSON_VALUE)
-    public InstitutionResponseDTO createInstitution(@RequestBody InstitutionRequestDTO InstitutionRequestDTO){
-        return (adminInstitutionService.createInstitution(InstitutionRequestDTO));
+    public InstitutionResponseDTO createInstitution(@ModelAttribute InstitutionRequestDTO InstitutionRequestDTO, @RequestParam("file") MultipartFile file) throws Exception {
+        return (adminInstitutionService.createInstitution(InstitutionRequestDTO, file));
     }
 
     @PatchMapping(value = "institutions/editInstitution/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -162,6 +170,4 @@ public class AdminController {
     public Long deleteBoxById(@PathVariable("institutionId") Long institutionId, @PathVariable("boxId") Long boxId){
         return adminBoxService.deleteBoxById(institutionId, boxId);
     }
-
-
 }
