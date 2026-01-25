@@ -43,7 +43,7 @@ public class SecurityConfig {
                         .hasAnyRole("ADMIN")
 
                         .requestMatchers("/api/client/**")
-                        .hasAnyRole("ADMIN", "CLIENT")
+                        .hasAnyRole("ADMIN", "CLIENT", "MANAGER")
 
                         .requestMatchers("/api/manager/**")
                         .hasAnyRole("ADMIN", "MANAGER")

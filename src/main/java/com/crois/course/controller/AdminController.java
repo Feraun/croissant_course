@@ -70,7 +70,7 @@ public class AdminController {
     }
 
     @DeleteMapping(value = "cities/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String deleteCityById(@PathVariable("id") Long id){
+    public Long deleteCityById(@PathVariable("id") Long id){
         return (adminCityService.deleteCityById(id));
     }
 

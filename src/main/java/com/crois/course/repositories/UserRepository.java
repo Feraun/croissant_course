@@ -17,10 +17,4 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             " WHERE u.username = :name")
     UserEntity findByUsername(String name);
 
-    @Query("SELECT b " +
-            " FROM UserEntity u " +
-            " JOIN u.history_of_boxes b " +
-            " WHERE u.id = :userId")
-    List<BoxShortResponseDTO> findUserBoxHistory(Long userId);
-
 }

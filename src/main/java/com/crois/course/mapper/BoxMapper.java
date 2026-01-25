@@ -14,7 +14,6 @@ import org.mapstruct.MappingTarget;
 public interface BoxMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "boxStatus", ignore = true)
     BoxEntity createEntityFromDtoForNewBox(CreateBoxDTO createBoxDTO);
 
     @Mapping(target = "institutionId", source="institution.id")
@@ -25,8 +24,4 @@ public interface BoxMapper {
 
     RandomBoxResponseDTO createManagersDtoFromEntity(BoxEntity boxEntity);
 
-    @AfterMapping
-    default void setRoleForNewBox(@MappingTarget BoxEntity box) {
-            box.setBoxStatus(BoxStatus.FOR_SALE);
-    }
 }

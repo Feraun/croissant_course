@@ -1,4 +1,5 @@
 package com.crois.course.mapper;
+import com.crois.course.dto.UserDTO.UserProfileDTO;
 import com.crois.course.dto.UserDTO.UserRegistrationRequestDTO;
 import com.crois.course.entity.Role;
 import com.crois.course.entity.UserEntity;
@@ -33,4 +34,6 @@ public interface UserRegistrationMapper {
             user.setRoles(List.of(Role.CLIENT));
         }
     }
+
+    UserProfileDTO createUserProfileDtoFromEntity(UserEntity userEntity);
 }

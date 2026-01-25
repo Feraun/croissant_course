@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +24,7 @@ public class UserEntity {
 
     @Column(name="username", unique = true)
     private String username;
+
     private boolean enabled;
 
     private String firstName;
@@ -30,7 +32,7 @@ public class UserEntity {
     private String contactNumber;
     private String email;
 
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "roles", nullable = false)
@@ -41,7 +43,13 @@ public class UserEntity {
     @JsonIgnore
     private PasswordEntity password;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
-    private List<BoxEntity> history_of_boxes = new ArrayList<>();
+    @OneToMany(
+            mappedBy = "user",
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private  List<OrderEntity> orders = new ArrayList<>();
+
+
 
 }

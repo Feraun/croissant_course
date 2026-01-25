@@ -49,9 +49,9 @@ public class AdminCityService {
         return (cityMapper.createDtoFromEntity(cityRepository.findById(id).orElseThrow()));
     }
 
-    public String deleteCityById(@PathVariable("id") Long id){
+    public Long deleteCityById(@PathVariable("id") Long id){
         cityRepository.deleteById(id);
-        return ("City with id: '" + id + "' was deleted");
+        return (id);
     }
 
     public PageResult<CityDTO> searchCity(String name, PageParams params){

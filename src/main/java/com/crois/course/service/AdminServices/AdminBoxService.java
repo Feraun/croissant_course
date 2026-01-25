@@ -34,8 +34,6 @@ public class AdminBoxService {
 
         boxEntity.setInstitution(institutionRepository.getReferenceById(institutionId));
 
-        boxMapper.setRoleForNewBox(boxEntity);
-
         boxRepository.save(boxEntity);
 
         return boxMapper.createDtoFromEntity(boxEntity);

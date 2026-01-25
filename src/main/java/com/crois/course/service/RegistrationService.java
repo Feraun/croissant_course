@@ -9,6 +9,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.LocalDateTime;
+
 @Service
 public class RegistrationService {
 
@@ -31,6 +33,8 @@ public class RegistrationService {
         PasswordEntity password = new PasswordEntity(dto.password());
 
         user.setPassword(password);
+
+        user.setCreatedAt(LocalDateTime.now());
 
         userRepository.save(user);
 

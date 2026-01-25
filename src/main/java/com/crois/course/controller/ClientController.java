@@ -3,10 +3,10 @@ package com.crois.course.controller;
 import com.crois.course.dto.BoxDTO.BoxShortResponseDTO;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseClient;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseDTO;
+import com.crois.course.dto.OrderDTO;
 import com.crois.course.dto.PageParams;
 import com.crois.course.dto.PageResult;
-import com.crois.course.dto.UserDTO.AuthUser;
-import com.crois.course.entity.BoxEntity;
+import com.crois.course.dto.UserDTO.UserProfileDTO;
 import com.crois.course.service.ClientService;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -53,9 +53,14 @@ public class ClientController {
         return clientService.getBoxById(institutionId, boxId);
     }
 
-    @PatchMapping(value = "institutions/{institutionId}/boxes/{boxId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public BoxShortResponseDTO buyBox(@PathVariable("institutionId") Long institutionId, @PathVariable("boxId") Long boxId, Authentication authentication){
-        return clientService.buyBox(institutionId, boxId, authentication);
+    @PatchMapping(value = "boxes/{boxId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public OrderDTO buyBox(@PathVariable("boxId") Long boxId, Authentication authentication){
+        return clientService.buyBox(boxId, authentication);
+    }
+
+    @GetMapping(value = "users/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public UserProfileDTO getDataForProfilePage(@PathVariable("id") Long userId){
+        return clientService.getDataForProfilePage(userId);
     }
 
 //    @GetMapping(value = "myOrdersHistory", produces = MediaType.APPLICATION_JSON_VALUE)

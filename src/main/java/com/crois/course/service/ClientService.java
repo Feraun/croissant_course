@@ -3,12 +3,16 @@ package com.crois.course.service;
 import com.crois.course.dto.BoxDTO.BoxShortResponseDTO;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseClient;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseDTO;
+import com.crois.course.dto.OrderDTO;
 import com.crois.course.dto.PageParams;
 import com.crois.course.dto.PageResult;
 import com.crois.course.dto.UserDTO.AuthUser;
+import com.crois.course.dto.UserDTO.UserProfileDTO;
 import com.crois.course.entity.*;
 import com.crois.course.mapper.BoxMapper;
 import com.crois.course.mapper.InstitutionMapper;
+import com.crois.course.mapper.OrderMapper;
+import com.crois.course.mapper.UserRegistrationMapper;
 import com.crois.course.repositories.*;
 import com.crois.course.service.SearchService.CriteriaFilter;
 import com.crois.course.service.SearchService.CriteriaSearchUtil;
@@ -22,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -38,6 +43,10 @@ public class ClientService {
     private final BoxRepository boxRepository;
 
     private final UserRepository userRepository;
+    private final UserRegistrationMapper userMapper;
+
+    private final OrderRepository orderRepository;
+    private final OrderMapper orderMapper;
 
     public PageResult<InstitutionResponseClient> searchInstitution(String name, PageParams params){
 
@@ -75,20 +84,31 @@ public class ClientService {
     }
 
     @Transactional
-    public BoxShortResponseDTO buyBox(@PathVariable("institutionId") Long institutionId, @PathVariable("boxId") Long boxId, Authentication authentication){
+    public OrderDTO buyBox(@PathVariable("boxId") Long boxId, Authentication authentication){
 
-        BoxEntity boxEntity = boxRepository.findByIdAndInstitutionId(boxId, institutionId).orElseThrow();
+        BoxEntity boxEntity = boxRepository.findById(boxId).orElseThrow();
 
-        boxEntity.setBoxStatus(BoxStatus.PAID);
+        boxEntity.setQuantity(boxEntity.getQuantity() - 1);
 
         AuthUser authUser = (AuthUser) authentication.getPrincipal();
 
         UserEntity user = userRepository.getReferenceById(authUser.getId());
 
-        boxEntity.setOwner(user);
-        user.getHistory_of_boxes().add(boxEntity);
+        OrderEntity orderEntity = OrderEntity.builder()
+                .box(boxEntity)
+                .amount(boxEntity.getPrice())
+                .user(user)
+                .createdAt(LocalDateTime.now())
+                .build();
 
-        return boxMapper.createShortDtoFromEntity(boxEntity);
+        orderRepository.save(orderEntity);
+
+        return orderMapper.createDtoFromEntity(orderEntity);
+    }
+
+    public UserProfileDTO getDataForProfilePage(Long id){
+        UserEntity userEntity = userRepository.getReferenceById(id);
+        return userMapper.createUserProfileDtoFromEntity(userEntity);
     }
 
 

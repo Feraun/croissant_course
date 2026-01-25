@@ -3,6 +3,9 @@ package com.crois.course.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "boxes")
 @Getter
@@ -23,17 +26,11 @@ public class BoxEntity {
 
     private Boolean randomly;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private BoxStatus boxStatus;
+    private Integer quantity;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "institution_id", nullable = false)
     private InstitutionEntity institution;
-
-    @ManyToOne()
-    @JoinColumn(name = "user_id")
-    private UserEntity owner;
 
     //todo доделать ProductEntity
 }

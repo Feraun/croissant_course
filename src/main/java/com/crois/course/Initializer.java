@@ -8,6 +8,7 @@ import com.crois.course.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class Initializer {
                 .username("admin")
                 .enabled(true)
                 .roles(List.of(Role.ADMIN))
-                .createdAt(new Date())
+                .createdAt(LocalDateTime.now())
                 .password(new PasswordEntity("admin123"))
                 .build();
 
@@ -33,7 +34,7 @@ public class Initializer {
                 .username("manager")
                 .enabled(true)
                 .roles(List.of(Role.MANAGER, Role.CLIENT))
-                .createdAt(new Date())
+                .createdAt(LocalDateTime.now())
                 .password(new PasswordEntity("1234"))
                 .build();
 
