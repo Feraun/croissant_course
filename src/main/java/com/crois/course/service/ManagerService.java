@@ -2,6 +2,7 @@ package com.crois.course.service;
 
 import com.crois.course.dto.BoxDTO.CreateBoxDTO;
 import com.crois.course.dto.BoxDTO.RandomBoxResponseDTO;
+import com.crois.course.dto.InstitutionDTO.InstitutionResponseManagerForGetAll;
 import com.crois.course.dto.PageParams;
 import com.crois.course.dto.PageResult;
 import com.crois.course.dto.UserDTO.AuthUser;
@@ -9,6 +10,7 @@ import com.crois.course.entity.BoxEntity;
 import com.crois.course.entity.InstitutionEntity;
 import com.crois.course.entity.UserEntity;
 import com.crois.course.mapper.BoxMapper;
+import com.crois.course.mapper.InstitutionMapper;
 import com.crois.course.repositories.BoxRepository;
 import com.crois.course.repositories.InstitutionRepository;
 import com.crois.course.service.SearchService.CriteriaFilter;
@@ -35,6 +37,7 @@ public class ManagerService {
     private EntityManager em;
 
     private final InstitutionRepository institutionRepository;
+    private final InstitutionMapper institutionMapper;
 
     private final BoxMapper boxMapper;
     private final BoxRepository boxRepository;
@@ -59,7 +62,7 @@ public class ManagerService {
         );
     }
 
-    public PageResult<RandomBoxResponseDTO> getAllBox(String name, PageParams params, Authentication authentication){
+    public PageResult<RandomBoxResponseDTO> getAllBox(Long institutionId, String name, PageParams params, Authentication authentication){
 
         AuthUser authUser = (AuthUser) authentication.getPrincipal();
 
@@ -75,6 +78,8 @@ public class ManagerService {
                         );
                     }
 
+
+
                     //фильтр на то в какое заведение входит бокс
                     Join<BoxEntity, InstitutionEntity> institutionJoin = root.join("institution");
 
@@ -82,6 +87,8 @@ public class ManagerService {
                     Join<InstitutionEntity, UserEntity> managerJoin = institutionJoin.join("managers");
 
                     predicates.add(cb.equal(managerJoin.get("id"), authUser.getId()));
+                    predicates.add(cb.equal(institutionJoin.get("id"), institutionId));
+
                 }
         );
 
@@ -92,5 +99,38 @@ public class ManagerService {
                 params,
                 boxMapper::createManagersDtoFromEntity
         );
+    }
+
+    public PageResult<InstitutionResponseManagerForGetAll> getMyInstitutions(String name, PageParams params, Authentication authentication){
+
+        AuthUser authUser = (AuthUser) authentication.getPrincipal();
+
+        List<CriteriaFilter<InstitutionEntity>> filters = List.of(
+                (cb, root, predicates) -> {
+
+                    if (name != null && !name.isBlank()) {
+                        predicates.add(
+                                cb.like(
+                                        cb.lower(root.get("name")),
+                                        "%" + name.toLowerCase() + "%"
+                                )
+                        );
+                    }
+
+                    //фильтр на то в какое заведение входит менеджер и тогда он будет видеть только свои заведения
+                    Join<InstitutionEntity, UserEntity> managerJoin = root.join("managers");
+
+                    predicates.add(cb.equal(managerJoin.get("id"), authUser.getId()));
+                }
+        );
+
+        return CriteriaSearchUtil.search(
+                em,
+                InstitutionEntity.class,
+                filters,
+                params,
+                institutionMapper::createManagerDtoFromEntity
+        );
+
     }
 }

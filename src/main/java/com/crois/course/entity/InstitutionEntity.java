@@ -6,7 +6,6 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "institutions")
@@ -38,7 +37,6 @@ public class InstitutionEntity {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<UserEntity> managers = new ArrayList<>();
-    ;
 
     @Column(name = "city_id", nullable = false)
     private Long cityId;
@@ -63,7 +61,8 @@ public class InstitutionEntity {
     )
     private  List<BoxEntity> boxes = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id", nullable = false)
     private ImageEntity logo;
 

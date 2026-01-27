@@ -106,9 +106,13 @@ public class ClientService {
         return orderMapper.createDtoFromEntity(orderEntity);
     }
 
-    public UserProfileDTO getDataForProfilePage(Long id){
-        UserEntity userEntity = userRepository.getReferenceById(id);
-        return userMapper.createUserProfileDtoFromEntity(userEntity);
+    public UserProfileDTO getDataForProfilePage(Authentication authentication){
+        AuthUser authUser = (AuthUser)  authentication.getPrincipal();
+
+        UserEntity user = userRepository.getReferenceById(authUser.getId());
+
+        return userMapper.createUserProfileDtoFromEntity(user);
+
     }
 
 

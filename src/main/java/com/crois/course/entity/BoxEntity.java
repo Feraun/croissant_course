@@ -3,9 +3,6 @@ package com.crois.course.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Table(name = "boxes")
 @Getter
@@ -19,13 +16,16 @@ public class BoxEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
     private String description;
 
+    @Column(nullable = false)
     private Double price;
 
     private Boolean randomly;
 
+    @Column(nullable = false)
     private Integer quantity;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

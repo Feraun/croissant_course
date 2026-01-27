@@ -6,7 +6,6 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -49,7 +48,4 @@ public class UserEntity {
             fetch = FetchType.LAZY
     )
     private  List<OrderEntity> orders = new ArrayList<>();
-
-
-
 }

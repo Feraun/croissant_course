@@ -10,6 +10,7 @@ public interface CityMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "isActive", constant = "true")
+    @Mapping(target = "institutions", ignore = true)
     CityEntity createEntityFromDTO(CityDTO cityDTO);
 
     CityDTO createDtoFromEntity(CityEntity cityEntity);

@@ -8,22 +8,18 @@ import com.crois.course.dto.PageParams;
 import com.crois.course.dto.PageResult;
 import com.crois.course.dto.UserDTO.UserProfileDTO;
 import com.crois.course.service.ClientService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/client/")
+@AllArgsConstructor
 public class ClientController {
 
     private final ClientService clientService;
 
-
-    public ClientController(ClientService clientService){
-        this.clientService = clientService;
-    }
 
     @GetMapping("/institutions")
     public PageResult<InstitutionResponseClient> searchInstitutions(
@@ -58,9 +54,9 @@ public class ClientController {
         return clientService.buyBox(boxId, authentication);
     }
 
-    @GetMapping(value = "users/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public UserProfileDTO getDataForProfilePage(@PathVariable("id") Long userId){
-        return clientService.getDataForProfilePage(userId);
+    @GetMapping(value = "me", produces = MediaType.APPLICATION_JSON_VALUE)
+    public UserProfileDTO getDataForProfilePage(Authentication authentication){
+        return clientService.getDataForProfilePage(authentication);
     }
 
 //    @GetMapping(value = "myOrdersHistory", produces = MediaType.APPLICATION_JSON_VALUE)

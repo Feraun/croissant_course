@@ -17,6 +17,8 @@ public interface UserRegistrationMapper {
     @Mapping(target = "password", ignore = true)
     @Mapping(target =  "enabled", constant = "true")
     @Mapping(target = "roles", ignore = true )
+    @Mapping(target = "orders", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
     UserEntity toUserRegistrationEntity(UserRegistrationRequestDTO dto);
 
     @Mapping(target = "password", ignore = true)

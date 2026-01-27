@@ -15,12 +15,10 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class ImageEntity {
-
     @Id
     private UUID id;
 
     private long size;
 
     private String httpContentType;
-
 }
