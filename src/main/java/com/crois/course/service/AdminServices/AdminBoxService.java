@@ -2,19 +2,30 @@ package com.crois.course.service.AdminServices;
 
 import com.crois.course.dto.BoxDTO.BoxShortResponseDTO;
 import com.crois.course.dto.BoxDTO.CreateBoxDTO;
-import com.crois.course.entity.BoxEntity;
+import com.crois.course.dto.OrderDTO;
+import com.crois.course.dto.PageParams;
+import com.crois.course.dto.PageResult;
+import com.crois.course.entity.*;
 import com.crois.course.mapper.BoxMapper;
+import com.crois.course.mapper.OrderMapper;
 import com.crois.course.repositories.BoxRepository;
 import com.crois.course.repositories.InstitutionRepository;
+import com.crois.course.repositories.OrderRepository;
+import com.crois.course.service.SearchService.CriteriaFilter;
+import com.crois.course.service.SearchService.CriteriaSearchUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.Join;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.mapstruct.control.MappingControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -27,6 +38,9 @@ public class AdminBoxService {
     private final BoxRepository boxRepository;
 
     private final InstitutionRepository institutionRepository;
+
+    private final OrderRepository orderRepository;
+    private final OrderMapper orderMapper;
 
     @Transactional
     public CreateBoxDTO createBox(@PathVariable("institutionId") Long institutionId, @RequestBody CreateBoxDTO createBoxDTO){
@@ -68,6 +82,31 @@ public class AdminBoxService {
         else{
             throw new RuntimeException("Бокса нет");
         }
+    }
+
+    public PageResult<OrderDTO> searchOrders(String name, PageParams params){
+
+
+        List<CriteriaFilter<OrderEntity>> filters = List.of(
+                (cb, root, predicates) -> {
+                    if (name != null && !name.isBlank()) {
+                        predicates.add(
+                                cb.like(
+                                        cb.lower(root.get("name")),
+                                        "%" + name.toLowerCase() + "%"
+                                )
+                        );
+                    }
+                }
+        );
+
+        return CriteriaSearchUtil.search(
+                em,
+                OrderEntity.class,
+                filters,
+                params,
+                orderMapper::createDtoFromEntity
+        );
     }
 
 }

@@ -3,21 +3,26 @@ package com.crois.course.service;
 import com.crois.course.dto.BoxDTO.CreateBoxDTO;
 import com.crois.course.dto.BoxDTO.RandomBoxResponseDTO;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseManagerForGetAll;
+import com.crois.course.dto.OrderDTO;
 import com.crois.course.dto.PageParams;
 import com.crois.course.dto.PageResult;
 import com.crois.course.dto.UserDTO.AuthUser;
 import com.crois.course.entity.BoxEntity;
 import com.crois.course.entity.InstitutionEntity;
+import com.crois.course.entity.OrderEntity;
 import com.crois.course.entity.UserEntity;
 import com.crois.course.mapper.BoxMapper;
 import com.crois.course.mapper.InstitutionMapper;
+import com.crois.course.mapper.OrderMapper;
 import com.crois.course.repositories.BoxRepository;
 import com.crois.course.repositories.InstitutionRepository;
+import com.crois.course.repositories.OrderRepository;
 import com.crois.course.service.SearchService.CriteriaFilter;
 import com.crois.course.service.SearchService.CriteriaSearchUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -41,6 +46,8 @@ public class ManagerService {
 
     private final BoxMapper boxMapper;
     private final BoxRepository boxRepository;
+
+    private final OrderMapper orderMapper;
 
     public CreateBoxDTO createBoxByManager(@PathVariable("institutionId") Long institutionId, @RequestBody CreateBoxDTO createBoxDTO, Authentication authentication){
 
@@ -77,8 +84,6 @@ public class ManagerService {
                                 )
                         );
                     }
-
-
 
                     //фильтр на то в какое заведение входит бокс
                     Join<BoxEntity, InstitutionEntity> institutionJoin = root.join("institution");
@@ -131,6 +136,44 @@ public class ManagerService {
                 params,
                 institutionMapper::createManagerDtoFromEntity
         );
-
     }
+
+    public PageResult<OrderDTO> searchOrders(String name, PageParams params, Authentication authentication){
+
+        AuthUser authUser = (AuthUser) authentication.getPrincipal();
+
+        List<CriteriaFilter<OrderEntity>> filters = List.of(
+                (cb, root, predicates) -> {
+                    if (name != null && !name.isBlank()) {
+                        predicates.add(
+                                cb.like(
+                                        cb.lower(root.get("name")),
+                                        "%" + name.toLowerCase() + "%"
+                                )
+                        );
+                    }
+
+                    Join<OrderEntity, BoxEntity> boxJoin =
+                            root.join("box", JoinType.INNER);
+
+                    Join<BoxEntity, InstitutionEntity> institutionJoin =
+                            boxJoin.join("institution", JoinType.INNER);
+
+                    Join<InstitutionEntity, UserEntity> managerJoin =
+                            institutionJoin.join("managers", JoinType.INNER);
+
+
+                    predicates.add(cb.equal(managerJoin.get("id"), authUser.getId()));
+                }
+        );
+
+        return CriteriaSearchUtil.search(
+                em,
+                OrderEntity.class,
+                filters,
+                params,
+                orderMapper::createDtoFromEntity
+        );
+    }
+
 }

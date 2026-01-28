@@ -7,6 +7,7 @@ import com.crois.course.dto.CategoryInstitutionDTO.CategoryInstitutionDTO;
 import com.crois.course.dto.CityDTO.CityDTO;
 import com.crois.course.dto.InstitutionDTO.InstitutionRequestDTO;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseDTO;
+import com.crois.course.dto.OrderDTO;
 import com.crois.course.dto.PageParams;
 import com.crois.course.dto.PageResult;
 import com.crois.course.service.AdminServices.*;
@@ -22,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -169,5 +171,23 @@ public class AdminController {
     @DeleteMapping(value = "institutions/{institutionId}/boxes/{boxId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Long deleteBoxById(@PathVariable("institutionId") Long institutionId, @PathVariable("boxId") Long boxId){
         return adminBoxService.deleteBoxById(institutionId, boxId);
+    }
+
+    @GetMapping(value = "orders", produces = MediaType.APPLICATION_JSON_VALUE)
+    public PageResult<OrderDTO> getAllOrders(
+            @RequestParam(required = false) String name,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(defaultValue = "asc") String direction
+    ) {
+        PageParams params = new PageParams(
+                page,
+                size,
+                sortBy,
+                direction.equalsIgnoreCase("asc")
+        );
+
+        return adminBoxService.searchOrders(name, params);
     }
 }

@@ -8,8 +8,8 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface OrderMapper {
 
-    @Mapping(target = "userId", source = "user.id")
-    @Mapping(target = "boxId", source = "box.id")
+    @Mapping(target = "user", source = "user")
+    @Mapping(target = "box", source = "box")
     OrderDTO createDtoFromEntity(OrderEntity orderEntity);
 
 }
