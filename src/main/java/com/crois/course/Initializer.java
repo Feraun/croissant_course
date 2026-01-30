@@ -23,7 +23,12 @@ public class Initializer {
         UserEntity admin = UserEntity.builder()
                 .username("admin")
                 .enabled(true)
-                .roles(List.of(Role.ADMIN))
+                .roles(List.of(Role.ADMIN, Role.CLIENT, Role.MANAGER))
+                .firstName("grib")
+                .lastName("artem")
+                .contactNumber("52526")
+                .email("sads@dsfs.com")
+
                 .createdAt(LocalDateTime.now())
                 .password(new PasswordEntity("admin123"))
                 .build();

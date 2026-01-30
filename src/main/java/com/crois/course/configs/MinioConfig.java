@@ -11,10 +11,6 @@ public class MinioConfig {
 
     public static final String COMMON_BUCKET_NAME = "common";
 
-    private String minioUsername;
-
-    private String minioPassword;
-
     @Bean
     public MinioClient minioClient() throws Exception {
         String minioUrl = "http://localhost:9000";

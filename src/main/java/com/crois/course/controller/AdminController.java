@@ -10,9 +10,17 @@ import com.crois.course.dto.InstitutionDTO.InstitutionResponseDTO;
 import com.crois.course.dto.OrderDTO;
 import com.crois.course.dto.PageParams;
 import com.crois.course.dto.PageResult;
+import com.crois.course.entity.CityEntity;
+import com.crois.course.entity.OrderEntity;
+import com.crois.course.mapper.CityMapper;
+import com.crois.course.mapper.OrderMapper;
 import com.crois.course.service.AdminServices.*;
+import jakarta.persistence.*;
+import jakarta.persistence.criteria.*;
+import jakarta.persistence.metamodel.Metamodel;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.data.domain.Page;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,7 +31,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -173,21 +183,33 @@ public class AdminController {
         return adminBoxService.deleteBoxById(institutionId, boxId);
     }
 
-    @GetMapping(value = "orders", produces = MediaType.APPLICATION_JSON_VALUE)
-    public PageResult<OrderDTO> getAllOrders(
-            @RequestParam(required = false) String name,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String sortBy,
-            @RequestParam(defaultValue = "asc") String direction
-    ) {
-        PageParams params = new PageParams(
-                page,
-                size,
-                sortBy,
-                direction.equalsIgnoreCase("asc")
-        );
+//    @GetMapping(value = "orders", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public PageResult<OrderDTO> getAllOrders(
+//            @RequestParam(required = false) String name,
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "10") int size,
+//            @RequestParam(required = false) String sortBy,
+//            @RequestParam(defaultValue = "asc") String direction
+//    ) {
+//        PageParams params = new PageParams(
+//                page,
+//                size,
+//                sortBy,
+//                direction.equalsIgnoreCase("asc")
+//        );
+//
+//        return adminBoxService.searchOrders(name, params);
+//    }
 
-        return adminBoxService.searchOrders(name, params);
+    private final AdminOrderService adminOrderService;
+
+    @GetMapping(value = "orders", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Page<OrderDTO> searchOrders(
+            @RequestParam(required = false) Long id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "asc") String direction
+    ){
+        return adminOrderService.searchOrder(id, page, size, direction);
     }
 }
