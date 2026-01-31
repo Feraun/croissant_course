@@ -81,4 +81,7 @@ public class AdminCategoryService {
         );
     }
 
+    public List<CategoryInstitutionDTO> getAllCategory(){
+        return categoryInstitutionRepository.findAll().stream().map(categoryInstitutionMapper::createDtoFromEntity).toList();
+    }
 }

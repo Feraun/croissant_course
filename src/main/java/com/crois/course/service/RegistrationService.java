@@ -3,7 +3,7 @@ package com.crois.course.service;
 import com.crois.course.dto.UserDTO.UserRegistrationRequestDTO;
 import com.crois.course.entity.PasswordEntity;
 import com.crois.course.entity.UserEntity;
-import com.crois.course.mapper.UserRegistrationMapper;
+import com.crois.course.mapper.UserMapper;
 import com.crois.course.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -15,9 +15,9 @@ import java.time.LocalDateTime;
 public class RegistrationService {
 
     private final UserRepository userRepository;
-    private final UserRegistrationMapper userRegistrationMapper;
+    private final UserMapper userRegistrationMapper;
 
-    public RegistrationService(UserRepository userRepository1, UserRegistrationMapper userRegistrationMapper){
+    public RegistrationService(UserRepository userRepository1, UserMapper userRegistrationMapper){
         this.userRepository = userRepository1;
         this.userRegistrationMapper = userRegistrationMapper;
     }

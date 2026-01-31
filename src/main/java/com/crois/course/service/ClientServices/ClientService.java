@@ -12,7 +12,7 @@ import com.crois.course.entity.*;
 import com.crois.course.mapper.BoxMapper;
 import com.crois.course.mapper.InstitutionMapper;
 import com.crois.course.mapper.OrderMapper;
-import com.crois.course.mapper.UserRegistrationMapper;
+import com.crois.course.mapper.UserMapper;
 import com.crois.course.repositories.*;
 import com.crois.course.service.SearchService.CriteriaFilter;
 import com.crois.course.service.SearchService.CriteriaSearchUtil;
@@ -40,7 +40,7 @@ public class ClientService {
 
 
     private final UserRepository userRepository;
-    private final UserRegistrationMapper userMapper;
+    private final UserMapper userMapper;
 
 
 

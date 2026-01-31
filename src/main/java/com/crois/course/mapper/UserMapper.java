@@ -1,4 +1,5 @@
 package com.crois.course.mapper;
+import com.crois.course.dto.UserDTO.UserForAddToInst;
 import com.crois.course.dto.UserDTO.UserProfileDTO;
 import com.crois.course.dto.UserDTO.UserRegistrationRequestDTO;
 import com.crois.course.entity.Role;
@@ -11,7 +12,7 @@ import org.mapstruct.MappingTarget;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface UserRegistrationMapper {
+public interface UserMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "password", ignore = true)
@@ -38,4 +39,6 @@ public interface UserRegistrationMapper {
     }
 
     UserProfileDTO createUserProfileDtoFromEntity(UserEntity userEntity);
+
+    UserForAddToInst createUserForAddToInstDTO(UserEntity userEntity);
 }

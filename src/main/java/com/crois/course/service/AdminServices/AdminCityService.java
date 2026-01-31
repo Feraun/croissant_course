@@ -79,4 +79,11 @@ public class AdminCityService {
         );
     }
 
+    public List<CityDTO> getAllCities(){
+        return cityRepository.findAll()
+                .stream()
+                .map(cityMapper::createDtoFromEntity)
+                .toList();
+    }
+
 }

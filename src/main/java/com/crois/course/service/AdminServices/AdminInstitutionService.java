@@ -4,10 +4,7 @@ import com.crois.course.dto.InstitutionDTO.InstitutionRequestDTO;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseDTO;
 import com.crois.course.dto.PageParams;
 import com.crois.course.dto.PageResult;
-import com.crois.course.entity.CategoryInstitutionEntity;
-import com.crois.course.entity.ImageEntity;
-import com.crois.course.entity.InstitutionEntity;
-import com.crois.course.entity.UserEntity;
+import com.crois.course.entity.*;
 import com.crois.course.mapper.InstitutionMapper;
 import com.crois.course.repositories.CategoryInstitutionRepository;
 import com.crois.course.repositories.InstitutionRepository;
@@ -24,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -81,6 +79,13 @@ public class AdminInstitutionService {
 
         List<UserEntity> userEntityList = institutionRequestDTO.managersIds().stream()
                 .map(userRepository::getReferenceById)
+                .peek(user -> {
+                    List<Role> roles = new ArrayList<>(user.getRoles());
+                    if (!roles.contains(Role.MANAGER)) {
+                        roles.add(Role.MANAGER);
+                        user.setRoles(roles);
+                    }
+                })
                 .toList();
 
         institutionEntity.setManagers(userEntityList);

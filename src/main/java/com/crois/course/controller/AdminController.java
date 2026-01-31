@@ -1,6 +1,5 @@
 package com.crois.course.controller;
 
-
 import com.crois.course.dto.BoxDTO.BoxShortResponseDTO;
 import com.crois.course.dto.BoxDTO.CreateBoxDTO;
 import com.crois.course.dto.CategoryInstitutionDTO.CategoryInstitutionDTO;
@@ -10,6 +9,7 @@ import com.crois.course.dto.InstitutionDTO.InstitutionResponseDTO;
 import com.crois.course.dto.OrderDTO;
 import com.crois.course.dto.PageParams;
 import com.crois.course.dto.PageResult;
+import com.crois.course.dto.UserDTO.UserForAddToInst;
 import com.crois.course.service.AdminServices.*;
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.*;
@@ -21,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/admin/")
@@ -31,10 +33,11 @@ public class AdminController {
     private final AdminCategoryService adminCategoryService;
     private final AdminInstitutionService adminInstitutionService;
     private final AdminBoxService adminBoxService;
+    private final AdminUserService adminUserService;
 
 
     @GetMapping("/cities")
-    public PageResult<CityDTO> getAllCity(
+    public PageResult<CityDTO> searchCity(
             @RequestParam(required = false) String name,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -71,6 +74,11 @@ public class AdminController {
         return (adminCityService.deleteCityById(id));
     }
 
+    @GetMapping(value = "allCities", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<CityDTO> getAllCities(){
+        return adminCityService.getAllCities();
+    }
+
 
     @GetMapping("/categoriesOfInstitution")
     public PageResult<CategoryInstitutionDTO> searchCategoriesInstitution(
@@ -101,8 +109,13 @@ public class AdminController {
     }
 
     @GetMapping(value = "categoriesOfInstitution/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public CategoryInstitutionDTO editCategoryInstitution(@PathVariable("id") Long id){
+    public CategoryInstitutionDTO getCategoryInstitutionById(@PathVariable("id") Long id){
         return (adminCategoryService.getByIdCategoryInstitution(id));
+    }
+
+    @GetMapping("allCategories")
+    public List<CategoryInstitutionDTO> getAllCategories(){
+        return adminCategoryService.getAllCategory();
     }
 
     @DeleteMapping(value = "categoriesOfInstitution/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -143,6 +156,7 @@ public class AdminController {
         return (adminInstitutionService.getInstitutionById(id));
     }
 
+
     @DeleteMapping(value = "institutions/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Long deleteInstitutionById(@PathVariable("id") Long id){
         return (adminInstitutionService.deleteInstitutionById(id));
@@ -178,5 +192,10 @@ public class AdminController {
             @RequestParam(defaultValue = "asc") String direction
     ){
         return adminOrderService.searchOrder(id, page, size, direction);
+    }
+
+    @GetMapping(value = "getAllUsers", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<UserForAddToInst> getAllUsers(){
+        return adminUserService.getAllUsers();
     }
 }
