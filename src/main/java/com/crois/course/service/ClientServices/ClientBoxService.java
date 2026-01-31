@@ -8,7 +8,6 @@ import com.crois.course.entity.OrderEntity;
 import com.crois.course.entity.UserEntity;
 import com.crois.course.mapper.BoxMapper;
 import com.crois.course.mapper.OrderMapper;
-import com.crois.course.mapper.UserRegistrationMapper;
 import com.crois.course.repositories.BoxRepository;
 import com.crois.course.repositories.OrderRepository;
 import com.crois.course.repositories.UserRepository;

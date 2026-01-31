@@ -1,4 +1,4 @@
-package com.crois.course.security;
+package com.crois.course.configs;
 
 import com.crois.course.service.jwt.JwtAuthenticationEntryPoint;
 import com.crois.course.service.jwt.JwtFilter;
@@ -6,7 +6,6 @@ import com.crois.course.service.jwt.JwtUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;

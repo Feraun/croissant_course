@@ -1,7 +1,5 @@
 package com.crois.course.dto.BoxDTO;
 
-import com.crois.course.entity.BoxStatus;
-
 public record CreateBoxDTO(
         String name,
         String description,

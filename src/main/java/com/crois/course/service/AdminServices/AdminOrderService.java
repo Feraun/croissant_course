@@ -35,7 +35,8 @@ public class AdminOrderService {
             int size,
             String direction
     ){
-    String dir = "desc".equalsIgnoreCase(direction) ? "DESC" : "ASC";
+
+        String dir = "desc".equalsIgnoreCase(direction) ? "DESC" : "ASC";
 
         List<OrderDTO> orderDTOList = em.createQuery(
                 "FROM OrderEntity oe " +
@@ -46,6 +47,7 @@ public class AdminOrderService {
                 .setParameter("id", id)
                 .setFirstResult(page*size)
                 .setMaxResults(size)
+
                 .getResultList()
                 .stream()
                 .map(orderMapper::createDtoFromEntity)
