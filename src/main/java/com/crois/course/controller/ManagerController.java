@@ -6,7 +6,9 @@ import com.crois.course.dto.InstitutionDTO.InstitutionResponseManagerForGetAll;
 import com.crois.course.dto.OrderDTO;
 import com.crois.course.dto.PageParams;
 import com.crois.course.dto.PageResult;
-import com.crois.course.service.ManagerService;
+import com.crois.course.service.ManagerServices.ManagerBoxService;
+import com.crois.course.service.ManagerServices.ManagerInstitutionService;
+import com.crois.course.service.ManagerServices.ManagerOrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -18,12 +20,16 @@ import org.springframework.web.bind.annotation.*;
 public class ManagerController {
 
 
-    private final ManagerService managerService;
+    private final ManagerOrderService managerOrderService;
+
+    private final ManagerBoxService managerBoxService;
+
+    private final ManagerInstitutionService managerInstitutionService;
 
 
     @PostMapping(value = "institutions/{institutionId}/createBox", produces = MediaType.APPLICATION_JSON_VALUE)
     public CreateBoxDTO createBox(@PathVariable("institutionId") Long institutionId, @RequestBody CreateBoxDTO createBoxDTO, Authentication authentication){
-        return managerService.createBoxByManager(institutionId, createBoxDTO, authentication);
+        return managerBoxService.createBoxByManager(institutionId, createBoxDTO, authentication);
     }
 
     @GetMapping(value = "institutions/{institutionId}/boxes", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -45,7 +51,7 @@ public class ManagerController {
                 direction.equalsIgnoreCase("asc")
         );
 
-        return managerService.getAllBox(institutionId, name, params, authentication);
+        return managerBoxService.getAllBox(institutionId, name, params, authentication);
     }
 
     @GetMapping(value = "institutions", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -66,7 +72,7 @@ public class ManagerController {
                 direction.equalsIgnoreCase("asc")
         );
 
-        return managerService.getMyInstitutions(name, params, authentication);
+        return managerInstitutionService.getMyInstitutions(name, params, authentication);
     }
 
     @GetMapping(value = "orders", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -87,6 +93,6 @@ public class ManagerController {
                 direction.equalsIgnoreCase("asc")
         );
 
-        return managerService.searchOrders(name, params, authentication);
+        return managerOrderService.searchOrders(name, params, authentication);
     }
 }
