@@ -27,7 +27,7 @@ public class AdminCategoryService {
     private final CategoryInstitutionMapper categoryInstitutionMapper;
     private final CategoryInstitutionRepository categoryInstitutionRepository;
 
-    public CategoryInstitutionDTO createCategoryInstitution(@RequestBody CategoryInstitutionDTO categoryInstitutionDTO){
+    public CategoryInstitutionDTO createCategoryInstitution(CategoryInstitutionDTO categoryInstitutionDTO){
 
         CategoryInstitutionEntity categoryInstitutionEntity = categoryInstitutionMapper.createEntityFromDTO(categoryInstitutionDTO);
 
@@ -36,7 +36,7 @@ public class AdminCategoryService {
         return(categoryInstitutionMapper.createDtoFromEntity(categoryInstitutionEntity));
     }
 
-    public CategoryInstitutionDTO editCategoryInstitution(@PathVariable("id") Long id, @RequestBody CategoryInstitutionDTO categoryInstitutionDTO){
+    public CategoryInstitutionDTO editCategoryInstitution(Long id, CategoryInstitutionDTO categoryInstitutionDTO){
         CategoryInstitutionEntity categoryInstitutionEntity = categoryInstitutionRepository.findById(id).orElseThrow();
 
         categoryInstitutionEntity.setName(categoryInstitutionDTO.name());
@@ -47,12 +47,12 @@ public class AdminCategoryService {
         return (categoryInstitutionMapper.createDtoFromEntity(categoryInstitutionEntity));
     }
 
-    public CategoryInstitutionDTO getByIdCategoryInstitution(@PathVariable("id") Long id){
+    public CategoryInstitutionDTO getByIdCategoryInstitution(Long id){
         CategoryInstitutionEntity categoryInstitutionEntity = categoryInstitutionRepository.findById(id).orElseThrow();
         return (categoryInstitutionMapper.createDtoFromEntity(categoryInstitutionEntity));
     }
 
-    public Long deleteByIdCategoryInstitution(@PathVariable("id") Long id){
+    public Long deleteByIdCategoryInstitution(Long id){
         categoryInstitutionRepository.deleteById(id);
         return (id);
     }

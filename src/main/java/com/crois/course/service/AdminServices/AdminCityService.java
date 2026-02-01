@@ -27,13 +27,13 @@ public class AdminCityService {
     @PersistenceContext
     private EntityManager em;
 
-    public CityDTO createCity(@RequestBody CityDTO cityDTO){
+    public CityDTO createCity(CityDTO cityDTO){
         CityEntity cityEntity = cityMapper.createEntityFromDTO(cityDTO);
         cityRepository.save(cityEntity);
         return (cityMapper.createDtoFromEntity(cityEntity));
     }
 
-    public CityDTO editCity(@PathVariable("id") Long id, @RequestBody CityDTO cityDTO){
+    public CityDTO editCity(Long id, CityDTO cityDTO){
         //todo кастомные эксепшн
         CityEntity cityEntity = cityRepository.findById(id).orElseThrow();
 
@@ -45,11 +45,11 @@ public class AdminCityService {
 
     }
 
-    public CityDTO getCityById(@PathVariable("id") Long id){
+    public CityDTO getCityById(Long id){
         return (cityMapper.createDtoFromEntity(cityRepository.findById(id).orElseThrow()));
     }
 
-    public Long deleteCityById(@PathVariable("id") Long id){
+    public Long deleteCityById(Long id){
         cityRepository.deleteById(id);
         return (id);
     }

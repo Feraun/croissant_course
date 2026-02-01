@@ -39,7 +39,7 @@ public class AuthService {
         this.authenticationManager = authenticationManager;
     }
 
-    public Response createToken(@RequestBody UserLoginRequestDTO request) throws Exception {
+    public Response createToken(UserLoginRequestDTO request) throws Exception {
         try {
             // Используем authManager, который Spring подставляет в контроллер
             authenticationManager.authenticate(

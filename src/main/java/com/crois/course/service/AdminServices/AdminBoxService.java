@@ -41,7 +41,7 @@ public class AdminBoxService {
     private final OrderMapper orderMapper;
 
     @Transactional
-    public CreateBoxDTO createBox(@PathVariable("institutionId") Long institutionId, @RequestBody CreateBoxDTO createBoxDTO){
+    public CreateBoxDTO createBox(Long institutionId, CreateBoxDTO createBoxDTO){
         BoxEntity boxEntity = boxMapper.createEntityFromDtoForNewBox(createBoxDTO);
 
         boxEntity.setInstitution(institutionRepository.getReferenceById(institutionId));
@@ -52,7 +52,7 @@ public class AdminBoxService {
 
     }
 
-    public CreateBoxDTO editBox(@PathVariable("institutionId") Long institutionId, @PathVariable("boxId") Long boxId, @RequestBody CreateBoxDTO createBoxDTO){
+    public CreateBoxDTO editBox(Long institutionId, Long boxId, CreateBoxDTO createBoxDTO){
         BoxEntity boxEntity = boxRepository.findById(boxId).orElseThrow();
 
         boxEntity.setName(createBoxDTO.name());
@@ -64,14 +64,14 @@ public class AdminBoxService {
         return boxMapper.createDtoFromEntity(boxEntity);
     }
 
-    public BoxShortResponseDTO getBoxById(@PathVariable("institutionId") Long institutionId, @PathVariable("boxId") Long boxId){
+    public BoxShortResponseDTO getBoxById(Long institutionId, Long boxId){
         return boxRepository.findByIdAndInstitutionId(boxId, institutionId)
                 .map(boxMapper::createShortDtoFromEntity)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Box not found"));
 
     }
 
-    public Long deleteBoxById(@PathVariable("institutionId") Long institutionId, @PathVariable("boxId") Long boxId){
+    public Long deleteBoxById(Long institutionId, Long boxId){
 
         if (boxRepository.existsByIdAndInstitutionId(boxId, institutionId)){
             boxRepository.deleteById(boxId);

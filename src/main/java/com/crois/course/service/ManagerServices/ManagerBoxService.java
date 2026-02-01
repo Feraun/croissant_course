@@ -37,7 +37,7 @@ public class ManagerBoxService {
     private final BoxRepository boxRepository;
 
     private final InstitutionRepository institutionRepository;
-    public CreateBoxDTO createBoxByManager(@PathVariable("institutionId") Long institutionId, @RequestBody CreateBoxDTO createBoxDTO, Authentication authentication){
+    public CreateBoxDTO createBoxByManager(Long institutionId, CreateBoxDTO createBoxDTO, Authentication authentication){
 
         AuthUser authUser = (AuthUser) authentication.getPrincipal();
 

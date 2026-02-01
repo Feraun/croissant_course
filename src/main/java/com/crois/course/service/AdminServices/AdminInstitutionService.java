@@ -108,7 +108,7 @@ public class AdminInstitutionService {
         return institutionMapper.createDtoFromEntity(institutionEntity);
     }
 
-    public InstitutionResponseDTO editInstitution(@PathVariable("id") Long id, @RequestBody InstitutionRequestDTO institutionRequestDTO){
+    public InstitutionResponseDTO editInstitution(Long id, InstitutionRequestDTO institutionRequestDTO){
         InstitutionEntity institutionEntity = institutionRepository.findById(id).orElseThrow();
 
         institutionEntity.setName(institutionRequestDTO.name());
@@ -137,11 +137,11 @@ public class AdminInstitutionService {
         return(institutionMapper.createDtoFromEntity(institutionEntity));
     }
 
-    public InstitutionResponseDTO getInstitutionById(@PathVariable("id") Long id){
+    public InstitutionResponseDTO getInstitutionById(Long id){
         return(institutionMapper.createDtoFromEntity(institutionRepository.findById(id).orElseThrow()));
     }
 
-    public Long deleteInstitutionById(@PathVariable("id") Long id){
+    public Long deleteInstitutionById(Long id){
         institutionRepository.deleteById(id);
         return (id);
     }

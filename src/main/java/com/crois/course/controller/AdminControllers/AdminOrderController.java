@@ -4,6 +4,8 @@ import com.crois.course.dto.OrderDTO;
 import com.crois.course.service.AdminServices.AdminOrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,11 +22,9 @@ public class AdminOrderController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Page<OrderDTO> searchOrders(
             @RequestParam(required = false) Long id,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "asc") String direction
+            @PageableDefault Pageable pageable
     ){
-        return adminOrderService.searchOrder(id, page, size, direction);
+        return adminOrderService.searchOrder(id, pageable);
     }
 
 }

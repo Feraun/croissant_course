@@ -24,7 +24,7 @@ public class RegistrationService {
 
 
     @Transactional
-    public UserRegistrationRequestDTO createUser(@RequestBody UserRegistrationRequestDTO dto){
+    public UserRegistrationRequestDTO createUser(UserRegistrationRequestDTO dto){
 
         UserEntity user = userRegistrationMapper.toUserRegistrationEntity(dto);
 

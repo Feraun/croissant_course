@@ -22,7 +22,7 @@ public class ImageService {
 
     private final MinioService minioService;
 
-    public ResponseEntity<InputStreamResource> getImage(@PathVariable UUID id) throws Exception {
+    public ResponseEntity<InputStreamResource> getImage(UUID id) throws Exception {
 
         ImageEntity image = imageRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
