@@ -17,6 +17,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.Join;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -57,41 +59,12 @@ public class ManagerBoxService {
         );
     }
 
-    public PageResult<RandomBoxResponseDTO> getAllBox(Long institutionId, String name, PageParams params, Authentication authentication){
+    public Page<RandomBoxResponseDTO> getAllBox(Long institutionId, Long boxId, Authentication authentication, Pageable pageable){
 
         AuthUser authUser = (AuthUser) authentication.getPrincipal();
 
-        List<CriteriaFilter<BoxEntity>> filters = List.of(
-                (cb, root, predicates) -> {
-
-                    if (name != null && !name.isBlank()) {
-                        predicates.add(
-                                cb.like(
-                                        cb.lower(root.get("name")),
-                                        "%" + name.toLowerCase() + "%"
-                                )
-                        );
-                    }
-
-                    //фильтр на то в какое заведение входит бокс
-                    Join<BoxEntity, InstitutionEntity> institutionJoin = root.join("institution");
-
-                    //фильтр на то в какое заведение входит менеджер и тогда он будет видеть только свои боксы
-                    Join<InstitutionEntity, UserEntity> managerJoin = institutionJoin.join("managers");
-
-                    predicates.add(cb.equal(managerJoin.get("id"), authUser.getId()));
-                    predicates.add(cb.equal(institutionJoin.get("id"), institutionId));
-
-                }
-        );
-
-        return CriteriaSearchUtil.search(
-                em,
-                BoxEntity.class,
-                filters,
-                params,
-                boxMapper::createManagersDtoFromEntity
-        );
+        return boxRepository.getBoxFromInstitutionByManager(institutionId, authUser.getId(), boxId, pageable)
+                .map(boxMapper::createManagersDtoFromEntity);
     }
 
 }

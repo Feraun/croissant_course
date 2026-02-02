@@ -5,6 +5,9 @@ import com.crois.course.dto.PageParams;
 import com.crois.course.dto.PageResult;
 import com.crois.course.service.ManagerServices.ManagerOrderService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,24 +23,12 @@ public class ManagerOrderControllers {
     private final ManagerOrderService managerOrderService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public PageResult<OrderDTO> getAllOrders(
-            @RequestParam(required = false) String name,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String sortBy,
-            @RequestParam(defaultValue = "asc") String direction,
-
+    public Page<OrderDTO> getAllOrders(
+            @RequestParam(required = false) Long orderId,
+            @PageableDefault Pageable pageable,
             Authentication authentication
     ){
-
-        PageParams params = new PageParams(
-                page,
-                size,
-                sortBy,
-                direction.equalsIgnoreCase("asc")
-        );
-
-        return managerOrderService.searchOrders(name, params, authentication);
+        return managerOrderService.searchOrders(orderId, authentication, pageable);
     }
 
 }

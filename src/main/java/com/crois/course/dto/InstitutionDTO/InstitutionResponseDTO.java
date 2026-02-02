@@ -2,6 +2,7 @@ package com.crois.course.dto.InstitutionDTO;
 
 import com.crois.course.dto.BoxDTO.BoxShortResponseDTO;
 import com.crois.course.dto.CategoryInstitutionDTO.CategoryInstitutionDTO;
+import com.crois.course.dto.CategoryInstitutionDTO.ShortCategoryDTO;
 
 import java.util.Date;
 import java.util.List;
@@ -14,7 +15,6 @@ public record InstitutionResponseDTO(
         Double rating,
         String contactNumber,
         Date createdAt,
-        List<CategoryInstitutionDTO> categories,
-        List<BoxShortResponseDTO> boxes,
+        List<ShortCategoryDTO> categories,
         String logoImage
 ) { }

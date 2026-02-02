@@ -65,6 +65,4 @@ public class InstitutionEntity {
             fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id", nullable = false)
     private ImageEntity logo;
-
-
 }

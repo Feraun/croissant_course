@@ -5,9 +5,13 @@ import com.crois.course.dto.BoxDTO.RandomBoxResponseDTO;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseManagerForGetAll;
 import com.crois.course.dto.PageParams;
 import com.crois.course.dto.PageResult;
+import com.crois.course.dto.UserDTO.AuthUser;
 import com.crois.course.service.ManagerServices.ManagerBoxService;
 import com.crois.course.service.ManagerServices.ManagerInstitutionService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -21,51 +25,31 @@ public class ManagerInstitutionController {
     private final ManagerInstitutionService managerInstitutionService;
 
     @PostMapping(value = "/{institutionId}/createBox", produces = MediaType.APPLICATION_JSON_VALUE)
-    public CreateBoxDTO createBox(@PathVariable("institutionId") Long institutionId, @RequestBody CreateBoxDTO createBoxDTO, Authentication authentication){
+    public CreateBoxDTO createBox(
+            @PathVariable("institutionId") Long institutionId,
+            @RequestBody CreateBoxDTO createBoxDTO,
+            Authentication authentication){
         return managerBoxService.createBoxByManager(institutionId, createBoxDTO, authentication);
     }
 
     @GetMapping(value = "/{institutionId}/boxes", produces = MediaType.APPLICATION_JSON_VALUE)
-    public PageResult<RandomBoxResponseDTO> searchBoxes(
+    public Page<RandomBoxResponseDTO> searchBoxes(
             @PathVariable("institutionId") Long institutionId,
-
-            @RequestParam(required = false) String name,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String sortBy,
-            @RequestParam(defaultValue = "asc") String direction,
-
+            @RequestParam(required = false) Long boxId,
+            @PageableDefault Pageable pageable,
             Authentication authentication
     ) {
-        PageParams params = new PageParams(
-                page,
-                size,
-                sortBy,
-                direction.equalsIgnoreCase("asc")
-        );
 
-        return managerBoxService.getAllBox(institutionId, name, params, authentication);
+        return managerBoxService.getAllBox(institutionId, boxId, authentication, pageable);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public PageResult<InstitutionResponseManagerForGetAll> getMyInstitutions(
+    public Page<InstitutionResponseManagerForGetAll> getMyInstitutions(
             @RequestParam(required = false) String name,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String sortBy,
-            @RequestParam(defaultValue = "asc") String direction,
-
+            @PageableDefault Pageable pageable,
             Authentication authentication
     ){
-
-        PageParams params = new PageParams(
-                page,
-                size,
-                sortBy,
-                direction.equalsIgnoreCase("asc")
-        );
-
-        return managerInstitutionService.getMyInstitutions(name, params, authentication);
+        return managerInstitutionService.getMyInstitutions(name, pageable, authentication);
     }
 
 }
