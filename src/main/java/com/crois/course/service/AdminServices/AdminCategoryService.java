@@ -1,19 +1,16 @@
 package com.crois.course.service.AdminServices;
 
 import com.crois.course.dto.CategoryInstitutionDTO.CategoryInstitutionDTO;
-import com.crois.course.dto.PageParams;
-import com.crois.course.dto.PageResult;
+
 import com.crois.course.entity.CategoryInstitutionEntity;
 import com.crois.course.mapper.CategoryInstitutionMapper;
 import com.crois.course.repositories.CategoryInstitutionRepository;
-import com.crois.course.service.SearchService.CriteriaFilter;
-import com.crois.course.service.SearchService.CriteriaSearchUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -57,28 +54,9 @@ public class AdminCategoryService {
         return (id);
     }
 
-    public PageResult<CategoryInstitutionDTO> searchCategoryOfInstitution(String name, PageParams params){
-
-        List<CriteriaFilter<CategoryInstitutionEntity>> filters = List.of(
-                (cb, root, predicates) -> {
-                    if (name != null && !name.isBlank()) {
-                        predicates.add(
-                                cb.like(
-                                        cb.lower(root.get("name")),
-                                        "%" + name.toLowerCase() + "%"
-                                )
-                        );
-                    }
-                }
-        );
-
-        return CriteriaSearchUtil.search(
-                em,
-                CategoryInstitutionEntity.class,
-                filters,
-                params,
-                categoryInstitutionMapper::createDtoFromEntity
-        );
+    public Page<CategoryInstitutionDTO> searchCategoryOfInstitution(Long categoryId, String categoryName, Pageable pageable){
+        return categoryInstitutionRepository.searchCategories(categoryId, categoryName, pageable)
+                .map(categoryInstitutionMapper::createDtoFromEntity);
     }
 
     public List<CategoryInstitutionDTO> getAllCategory(){

@@ -17,7 +17,7 @@ public class AdminUserController {
 
     private final AdminUserService adminUserService;
 
-    @GetMapping(value = "/getAll", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/getAll")
     public List<UserForAddToInst> getAllUsers(){
         return adminUserService.getAllUsers();
     }

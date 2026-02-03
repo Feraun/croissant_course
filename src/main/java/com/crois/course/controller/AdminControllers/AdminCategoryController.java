@@ -6,6 +6,9 @@ import com.crois.course.dto.PageParams;
 import com.crois.course.dto.PageResult;
 import com.crois.course.service.AdminServices.AdminCategoryService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,39 +22,30 @@ public class AdminCategoryController {
     private final AdminCategoryService adminCategoryService;
 
     @GetMapping()
-    public PageResult<CategoryInstitutionDTO> searchCategoriesInstitution(
-            @RequestParam(required = false) String name,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String sortBy,
-            @RequestParam(defaultValue = "asc") String direction
-    ) {
-        PageParams params = new PageParams(
-                page,
-                size,
-                sortBy,
-                direction.equalsIgnoreCase("asc")
-        );
-
-        return adminCategoryService.searchCategoryOfInstitution(name, params);
+    public Page<CategoryInstitutionDTO> searchCategoriesInstitution(
+            @RequestParam(required = false) String categoryName,
+            @RequestParam(required = false) Long categoryId,
+            @PageableDefault Pageable pageable
+            ) {
+        return adminCategoryService.searchCategoryOfInstitution(categoryId, categoryName, pageable);
     }
 
-    @PostMapping(value = "/createCategory", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/createCategory")
     public CategoryInstitutionDTO createCategoryInstitution(@RequestBody CategoryInstitutionDTO categoryInstitutionDTO){
         return (adminCategoryService.createCategoryInstitution(categoryInstitutionDTO));
     }
 
-    @PatchMapping(value = "/editCategory/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/editCategory/{id}")
     public CategoryInstitutionDTO editCategoryInstitution(@PathVariable("id") Long id, @RequestBody CategoryInstitutionDTO categoryInstitutionDTO){
         return (adminCategoryService.editCategoryInstitution(id, categoryInstitutionDTO));
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}")
     public CategoryInstitutionDTO getCategoryInstitutionById(@PathVariable("id") Long id){
         return (adminCategoryService.getByIdCategoryInstitution(id));
     }
 
-    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}")
     public Long deleteCategoryInstitution(@PathVariable("id") Long id){
         return (adminCategoryService.deleteByIdCategoryInstitution(id));
     }

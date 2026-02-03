@@ -17,7 +17,7 @@ public class ClientBoxController {
 
     private final ClientBoxService clientBoxService;
 
-    @PatchMapping(value = "/{boxId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/{boxId}")
     public OrderDTO buyBox(@PathVariable("boxId") Long boxId, Authentication authentication){
         return clientBoxService.buyBox(boxId, authentication);
     }

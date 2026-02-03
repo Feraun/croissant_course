@@ -1,8 +1,6 @@
 package com.crois.course.repositories;
 
-import com.crois.course.dto.OrderDTO;
 import com.crois.course.entity.OrderEntity;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,7 +30,7 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
                 SELECT 1 FROM i.managers m
                 WHERE m.id = :managerId
             )
-            AND (:orderId IS NULL OR oe.id = :orderId)
+            AND (oe.id = coalesce(:id, oe.id))
             """)
     Page<OrderEntity> searchOrderByManager(
             @Param("orderId") Long orderId,

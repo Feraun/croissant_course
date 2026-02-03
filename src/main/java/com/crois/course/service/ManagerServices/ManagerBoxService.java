@@ -2,28 +2,19 @@ package com.crois.course.service.ManagerServices;
 
 import com.crois.course.dto.BoxDTO.CreateBoxDTO;
 import com.crois.course.dto.BoxDTO.RandomBoxResponseDTO;
-import com.crois.course.dto.PageParams;
-import com.crois.course.dto.PageResult;
 import com.crois.course.dto.UserDTO.AuthUser;
 import com.crois.course.entity.BoxEntity;
-import com.crois.course.entity.InstitutionEntity;
-import com.crois.course.entity.UserEntity;
 import com.crois.course.mapper.BoxMapper;
 import com.crois.course.repositories.BoxRepository;
 import com.crois.course.repositories.InstitutionRepository;
-import com.crois.course.service.SearchService.CriteriaFilter;
-import com.crois.course.service.SearchService.CriteriaSearchUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.criteria.Join;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -43,11 +34,10 @@ public class ManagerBoxService {
 
         AuthUser authUser = (AuthUser) authentication.getPrincipal();
 
-        //todo поменять проверку, т.к. теперь в заведение список сущностей
         if (institutionRepository.existsByIdAndManagerId(institutionId, authUser.getId())){
-            BoxEntity boxEntity = boxMapper.createEntityFromDtoForNewBox(createBoxDTO);
-
-            boxEntity.setInstitution(institutionRepository.getReferenceById(institutionId));
+            BoxEntity boxEntity = boxMapper.createEntityFromDtoForNewBox(
+                    createBoxDTO,
+                    institutionRepository.getReferenceById(institutionId));
 
             boxRepository.save(boxEntity);
 

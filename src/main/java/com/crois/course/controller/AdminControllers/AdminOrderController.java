@@ -19,7 +19,7 @@ public class AdminOrderController {
 
     private final AdminOrderService adminOrderService;
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping()
     public Page<OrderDTO> searchOrders(
             @RequestParam(required = false) Long id,
             @PageableDefault Pageable pageable

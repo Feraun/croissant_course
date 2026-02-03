@@ -2,20 +2,13 @@ package com.crois.course.service.ClientServices;
 
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseClient;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseDTO;
-import com.crois.course.dto.PageParams;
-import com.crois.course.dto.PageResult;
-import com.crois.course.entity.InstitutionEntity;
 import com.crois.course.mapper.InstitutionMapper;
 import com.crois.course.repositories.InstitutionRepository;
-import com.crois.course.service.SearchService.CriteriaFilter;
-import com.crois.course.service.SearchService.CriteriaSearchUtil;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
-
-import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -24,30 +17,16 @@ public class ClientInstitutionService {
     private final InstitutionMapper institutionMapper;
     private final InstitutionRepository institutionRepository;
 
-    @PersistenceContext
-    private EntityManager em;
-    public PageResult<InstitutionResponseClient> searchInstitution(String name, PageParams params){
 
-        List<CriteriaFilter<InstitutionEntity>> filters = List.of(
-                (cb, root, predicates) -> {
-                    if (name != null && !name.isBlank()) {
-                        predicates.add(
-                                cb.like(
-                                        cb.lower(root.get("name")),
-                                        "%" + name.toLowerCase() + "%"
-                                )
-                        );
-                    }
-                }
-        );
+    public Page<InstitutionResponseClient> searchInstitution(String name,
+                                                             String address,
+                                                             String city,
+                                                             String contactNumber,
+                                                             Long id,
+                                                             Pageable pageable){
 
-        return CriteriaSearchUtil.search(
-                em,
-                InstitutionEntity.class,
-                filters,
-                params,
-                institutionMapper::createDtoForClient
-        );
+        return institutionRepository.searchInstitution(name, address, city, contactNumber, id, pageable)
+                .map(institutionMapper::createDtoForClient);
     }
 
     public InstitutionResponseDTO getInstitutionById(@PathVariable("id") Long id){

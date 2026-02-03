@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ClientProfileController {
 
     private final ClientProfileService clientProfileService;
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping()
     public UserProfileDTO getDataForProfilePage(Authentication authentication){
         return clientProfileService.getDataForProfilePage(authentication);
     }

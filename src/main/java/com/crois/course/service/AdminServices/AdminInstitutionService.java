@@ -1,23 +1,18 @@
 package com.crois.course.service.AdminServices;
 
 import com.crois.course.dto.InstitutionDTO.InstitutionRequestDTO;
+import com.crois.course.dto.InstitutionDTO.InstitutionResponseClient;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseDTO;
-import com.crois.course.dto.PageParams;
-import com.crois.course.dto.PageResult;
 import com.crois.course.entity.*;
 import com.crois.course.mapper.InstitutionMapper;
 import com.crois.course.repositories.CategoryInstitutionRepository;
 import com.crois.course.repositories.InstitutionRepository;
 import com.crois.course.repositories.UserRepository;
 import com.crois.course.service.MinioService;
-import com.crois.course.service.SearchService.CriteriaFilter;
-import com.crois.course.service.SearchService.CriteriaSearchUtil;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -30,9 +25,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class AdminInstitutionService {
 
-    @PersistenceContext
-    private EntityManager em;
-
     private final InstitutionMapper institutionMapper;
     private final InstitutionRepository institutionRepository;
 
@@ -43,39 +35,22 @@ public class AdminInstitutionService {
     private final MinioService minioService;
 
     //todo написать кастомный поиск заведений с joinom категорий для карточек на фронте
-    public PageResult<InstitutionResponseDTO> searchInstitution(String name, PageParams params ){
+    public Page<InstitutionResponseDTO> searchInstitution(String name,
+                                                             String address,
+                                                             String city,
+                                                             String contactNumber,
+                                                             Long id,
+                                                             Pageable pageable){
 
-        List<CriteriaFilter<InstitutionEntity>> filters = List.of(
-                (cb, root, predicates) -> {
-                    if (name != null && !name.isBlank()) {
-                        predicates.add(
-                                cb.like(
-                                        cb.lower(root.get("name")),
-                                        "%" + name.toLowerCase() + "%"
-                                )
-                        );
-                    }
-                }
-        );
-
-        return CriteriaSearchUtil.search(
-                em,
-                InstitutionEntity.class,
-                filters,
-                params,
-                institutionMapper::createDtoFromEntity
-        );
+        return institutionRepository.searchInstitution(name, address, city, contactNumber, id, pageable)
+                .map(institutionMapper::createDtoFromEntity);
     }
 
     public InstitutionResponseDTO createInstitution(InstitutionRequestDTO institutionRequestDTO, MultipartFile multipartFile) throws Exception {
 
-        InstitutionEntity institutionEntity = institutionMapper.createEntityFromDTO(institutionRequestDTO);
-
         List<CategoryInstitutionEntity> categoryInstitutionEntityList = institutionRequestDTO.categoryIds().stream()
                 .map(categoryInstitutionRepository::getReferenceById)
                 .toList();
-
-        institutionEntity.setCategories(categoryInstitutionEntityList);
 
         List<UserEntity> userEntityList = institutionRequestDTO.managersIds().stream()
                 .map(userRepository::getReferenceById)
@@ -88,9 +63,6 @@ public class AdminInstitutionService {
                 })
                 .toList();
 
-        institutionEntity.setManagers(userEntityList);
-
-        institutionEntity.setCreatedAt(LocalDateTime.now());
 
         ImageEntity imageEntity = ImageEntity.builder()
                 .id(UUID.randomUUID())
@@ -98,8 +70,18 @@ public class AdminInstitutionService {
                 .httpContentType(multipartFile.getContentType())
                 .build();
 
+        //todo (institutionRequestDTO, categoryInstitutionEntityList, userEntityList, LocalDateTime.now(), imageEntity
 
+        InstitutionEntity institutionEntity = institutionMapper.createEntityFromDTO(institutionRequestDTO);
+
+
+
+        institutionEntity.setCategories(categoryInstitutionEntityList);
+        institutionEntity.setManagers(userEntityList);
+        institutionEntity.setCreatedAt(LocalDateTime.now());
         institutionEntity.setLogo(imageEntity);
+
+
 
         institutionRepository.save(institutionEntity);
 

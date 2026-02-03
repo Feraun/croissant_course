@@ -3,12 +3,14 @@ package com.crois.course.controller.AdminControllers;
 import com.crois.course.dto.BoxDTO.BoxShortResponseDTO;
 import com.crois.course.dto.BoxDTO.CreateBoxDTO;
 import com.crois.course.dto.InstitutionDTO.InstitutionRequestDTO;
+import com.crois.course.dto.InstitutionDTO.InstitutionResponseClient;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseDTO;
-import com.crois.course.dto.PageParams;
-import com.crois.course.dto.PageResult;
 import com.crois.course.service.AdminServices.AdminBoxService;
 import com.crois.course.service.AdminServices.AdminInstitutionService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,21 +24,15 @@ public class AdminInstitutionAndBoxController {
     private final AdminBoxService adminBoxService;
 
     @GetMapping()
-    public PageResult<InstitutionResponseDTO> searchInstitutions(
+    public Page<InstitutionResponseDTO> searchInstitutions(
             @RequestParam(required = false) String name,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String sortBy,
-            @RequestParam(defaultValue = "asc") String direction
+            @RequestParam(required = false) String address,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String contactNumber,
+            @RequestParam(required = false) Long id,
+            @PageableDefault Pageable pageable
     ) {
-        PageParams params = new PageParams(
-                page,
-                size,
-                sortBy,
-                direction.equalsIgnoreCase("asc")
-        );
-
-        return adminInstitutionService.searchInstitution(name, params);
+        return adminInstitutionService.searchInstitution(name, address, city, contactNumber, id, pageable);
     }
 
     @PostMapping(value = "/createInstitution", produces = MediaType.APPLICATION_JSON_VALUE)
