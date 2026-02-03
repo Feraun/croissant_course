@@ -1,4 +1,4 @@
-package com.crois.course.entity;
+package com.crois.course.enums;
 
 import lombok.Getter;
 

@@ -1,9 +1,9 @@
 package com.crois.course.service.AdminServices;
 
 import com.crois.course.dto.InstitutionDTO.InstitutionRequestDTO;
-import com.crois.course.dto.InstitutionDTO.InstitutionResponseClient;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseDTO;
 import com.crois.course.entity.*;
+import com.crois.course.enums.Role;
 import com.crois.course.mapper.InstitutionMapper;
 import com.crois.course.repositories.CategoryInstitutionRepository;
 import com.crois.course.repositories.InstitutionRepository;

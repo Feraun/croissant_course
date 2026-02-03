@@ -2,14 +2,13 @@ package com.crois.course;
 
 
 import com.crois.course.entity.PasswordEntity;
-import com.crois.course.entity.Role;
+import com.crois.course.enums.Role;
 import com.crois.course.entity.UserEntity;
 import com.crois.course.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Component

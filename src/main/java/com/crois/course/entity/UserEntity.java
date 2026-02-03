@@ -1,5 +1,6 @@
 package com.crois.course.entity;
 
+import com.crois.course.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;

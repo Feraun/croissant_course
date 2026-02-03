@@ -2,7 +2,7 @@ package com.crois.course.mapper;
 import com.crois.course.dto.UserDTO.UserForAddToInst;
 import com.crois.course.dto.UserDTO.UserProfileDTO;
 import com.crois.course.dto.UserDTO.UserRegistrationRequestDTO;
-import com.crois.course.entity.Role;
+import com.crois.course.enums.Role;
 import com.crois.course.entity.UserEntity;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
