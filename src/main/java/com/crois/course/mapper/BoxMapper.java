@@ -21,6 +21,8 @@ public interface BoxMapper {
 
     @Mapping(target = "randomly", ignore = true)
     @Mapping(target = "quantity", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "institution", ignore = true)
     BoxEntity updateBox(@MappingTarget BoxEntity boxEntity, CreateBoxDTO createBoxDTO);
 
     CreateBoxDTO createDtoFromEntity(BoxEntity boxEntity);

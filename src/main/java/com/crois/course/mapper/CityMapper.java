@@ -14,6 +14,8 @@ public interface CityMapper {
     @Mapping(target = "institutions", ignore = true)
     CityEntity createEntityFromDTO(CityDTO cityDTO);
 
+    @Mapping(target = "isActive", ignore = true)
+    @Mapping(target = "institutions", ignore = true)
     CityEntity updateEntity(@MappingTarget CityEntity cityEntity,
                             CityDTO cityDTO);
 
