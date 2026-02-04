@@ -1,11 +1,8 @@
 package com.crois.course.controller.ManagerControllers;
 
+import com.crois.course.dto.BoxDTO.BoxResponseDTO;
 import com.crois.course.dto.BoxDTO.CreateBoxDTO;
-import com.crois.course.dto.BoxDTO.RandomBoxResponseDTO;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseManagerForGetAll;
-import com.crois.course.dto.PageParams;
-import com.crois.course.dto.PageResult;
-import com.crois.course.dto.UserDTO.AuthUser;
 import com.crois.course.service.ManagerServices.ManagerBoxService;
 import com.crois.course.service.ManagerServices.ManagerInstitutionService;
 import lombok.AllArgsConstructor;
@@ -33,7 +30,7 @@ public class ManagerInstitutionController {
     }
 
     @GetMapping(value = "/{institutionId}/boxes", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Page<RandomBoxResponseDTO> searchBoxes(
+    public Page<BoxResponseDTO> searchBoxes(
             @PathVariable("institutionId") Long institutionId,
             @RequestParam(required = false) Long boxId,
             @PageableDefault Pageable pageable,

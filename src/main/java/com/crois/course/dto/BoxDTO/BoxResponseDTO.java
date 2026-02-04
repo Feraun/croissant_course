@@ -1,6 +1,6 @@
 package com.crois.course.dto.BoxDTO;
 
-public record RandomBoxResponseDTO(
+public record BoxResponseDTO(
         Long id,
         String name,
         String description,

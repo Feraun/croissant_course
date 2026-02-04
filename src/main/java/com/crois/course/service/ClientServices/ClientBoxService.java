@@ -1,6 +1,6 @@
 package com.crois.course.service.ClientServices;
 
-import com.crois.course.dto.BoxDTO.BoxShortResponseDTO;
+import com.crois.course.dto.BoxDTO.BoxResponseDTO;
 import com.crois.course.dto.OrderDTO;
 import com.crois.course.dto.UserDTO.AuthUser;
 import com.crois.course.entity.BoxEntity;
@@ -33,7 +33,7 @@ public class ClientBoxService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
 
-    public BoxShortResponseDTO getBoxById(@PathVariable("institutionId") Long institutionId, @PathVariable("boxId") Long boxId){
+    public BoxResponseDTO getBoxById(@PathVariable("institutionId") Long institutionId, @PathVariable("boxId") Long boxId){
         return boxRepository.findByIdAndInstitutionId(boxId, institutionId)
                 .map(boxMapper::createShortDtoFromEntity)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Box not found"));
@@ -51,12 +51,7 @@ public class ClientBoxService {
 
         UserEntity user = userRepository.getReferenceById(authUser.getId());
 
-        OrderEntity orderEntity = OrderEntity.builder()
-                .box(boxEntity)
-                .amount(boxEntity.getPrice())
-                .user(user)
-                .createdAt(LocalDateTime.now())
-                .build();
+        OrderEntity orderEntity = orderMapper.createEntity(user, boxEntity, LocalDateTime.now());
 
         orderRepository.save(orderEntity);
 

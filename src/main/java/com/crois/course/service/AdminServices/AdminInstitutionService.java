@@ -6,10 +6,12 @@ import com.crois.course.entity.*;
 import com.crois.course.enums.Role;
 import com.crois.course.mapper.InstitutionMapper;
 import com.crois.course.repositories.CategoryInstitutionRepository;
+import com.crois.course.repositories.CityRepository;
 import com.crois.course.repositories.InstitutionRepository;
 import com.crois.course.repositories.UserRepository;
 import com.crois.course.service.MinioService;
 import lombok.AllArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,19 +30,20 @@ public class AdminInstitutionService {
     private final InstitutionMapper institutionMapper;
     private final InstitutionRepository institutionRepository;
 
+    private final CityRepository cityRepository;
+
     private final UserRepository userRepository;
 
     private final CategoryInstitutionRepository categoryInstitutionRepository;
 
     private final MinioService minioService;
 
-    //todo написать кастомный поиск заведений с joinom категорий для карточек на фронте
     public Page<InstitutionResponseDTO> searchInstitution(String name,
-                                                             String address,
-                                                             String city,
-                                                             String contactNumber,
-                                                             Long id,
-                                                             Pageable pageable){
+                                                         String address,
+                                                         String city,
+                                                         String contactNumber,
+                                                         Long id,
+                                                         Pageable pageable){
 
         return institutionRepository.searchInstitution(name, address, city, contactNumber, id, pageable)
                 .map(institutionMapper::createDtoFromEntity);
@@ -52,17 +55,13 @@ public class AdminInstitutionService {
                 .map(categoryInstitutionRepository::getReferenceById)
                 .toList();
 
-        List<UserEntity> userEntityList = institutionRequestDTO.managersIds().stream()
-                .map(userRepository::getReferenceById)
-                .peek(user -> {
-                    List<Role> roles = new ArrayList<>(user.getRoles());
-                    if (!roles.contains(Role.MANAGER)) {
-                        roles.add(Role.MANAGER);
-                        user.setRoles(roles);
-                    }
-                })
-                .toList();
+        UserEntity manager = userRepository.getReferenceById(institutionRequestDTO.managerId());
 
+        if(manager.getRole().equals(Role.CLIENT)) {
+            manager.setRole(Role.MANAGER);
+        }
+
+        CityEntity cityEntity = cityRepository.getReferenceById(institutionRequestDTO.cityId());
 
         ImageEntity imageEntity = ImageEntity.builder()
                 .id(UUID.randomUUID())
@@ -70,18 +69,13 @@ public class AdminInstitutionService {
                 .httpContentType(multipartFile.getContentType())
                 .build();
 
-        //todo (institutionRequestDTO, categoryInstitutionEntityList, userEntityList, LocalDateTime.now(), imageEntity
-
-        InstitutionEntity institutionEntity = institutionMapper.createEntityFromDTO(institutionRequestDTO);
-
-
-
-        institutionEntity.setCategories(categoryInstitutionEntityList);
-        institutionEntity.setManagers(userEntityList);
-        institutionEntity.setCreatedAt(LocalDateTime.now());
-        institutionEntity.setLogo(imageEntity);
-
-
+        InstitutionEntity institutionEntity = institutionMapper.createEntityFromDTO(institutionRequestDTO,
+                categoryInstitutionEntityList,
+                manager,
+                LocalDateTime.now(),
+                imageEntity,
+                cityEntity
+        );
 
         institutionRepository.save(institutionEntity);
 
@@ -90,33 +84,38 @@ public class AdminInstitutionService {
         return institutionMapper.createDtoFromEntity(institutionEntity);
     }
 
+    //todo надо оптимизировать
     public InstitutionResponseDTO editInstitution(Long id, InstitutionRequestDTO institutionRequestDTO){
         InstitutionEntity institutionEntity = institutionRepository.findById(id).orElseThrow();
 
-        institutionEntity.setName(institutionRequestDTO.name());
-        institutionEntity.setCityId(institutionRequestDTO.cityId());
-        institutionEntity.setAddress(institutionRequestDTO.address());
+        UserEntity managerOld = institutionEntity.getManager();
+        UserEntity managerNew = userRepository.getReferenceById(institutionRequestDTO.managerId());
+
+        if(!managerOld.getId().equals(institutionRequestDTO.managerId())){
+            managerOld.setRole(Role.CLIENT);
+
+            if(managerNew.getRole().equals(Role.CLIENT)){
+                managerNew.setRole(Role.MANAGER);
+            }
+        }
 
         List<CategoryInstitutionEntity> categoryInstitutionEntityList = institutionRequestDTO.categoryIds().stream()
                 .map(categoryInstitutionRepository::getReferenceById)
-                .collect(Collectors.toList());
+                .toList();
 
-        institutionEntity.setCategories(categoryInstitutionEntityList);
+        CityEntity cityEntity = cityRepository.getReferenceById(institutionRequestDTO.cityId());
 
-        institutionEntity.setContactNumber(institutionRequestDTO.contactNumber());
+        UserEntity manager = userRepository.getReferenceById(institutionRequestDTO.managerId());
 
-        List<UserEntity> userEntityList = institutionRequestDTO.managersIds().stream()
-                .map(userRepository::getReferenceById)
-                .collect(Collectors.toList());
+        InstitutionEntity institutionEntityUpdated = institutionMapper.updateEntity(institutionEntity,
+                institutionRequestDTO,
+                categoryInstitutionEntityList,
+                manager,
+                cityEntity);
 
-        institutionEntity.setManagers(userEntityList);
+        institutionRepository.save(institutionEntityUpdated);
 
-        //todo придумать алгоритм расчета рейтинга на основе отзывов
-        institutionEntity.setRating(institutionRequestDTO.rating());
-
-        institutionRepository.save(institutionEntity);
-
-        return(institutionMapper.createDtoFromEntity(institutionEntity));
+        return(institutionMapper.createDtoFromEntity(institutionEntityUpdated));
     }
 
     public InstitutionResponseDTO getInstitutionById(Long id){

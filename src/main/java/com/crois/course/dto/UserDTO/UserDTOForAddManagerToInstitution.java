@@ -2,9 +2,8 @@ package com.crois.course.dto.UserDTO;
 
 import java.util.List;
 
-public record UserForAddToInst(
+public record UserDTOForAddManagerToInstitution(
         Long id,
-        String username,
-        List<String> roles
+        String username
 ) {
 }

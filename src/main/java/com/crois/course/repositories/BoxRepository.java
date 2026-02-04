@@ -24,7 +24,7 @@ public interface BoxRepository extends JpaRepository<BoxEntity, Long> {
     @Query("""
             SELECT be FROM BoxEntity be
             JOIN FETCH be.institution i
-            JOIN FETCH i.managers m
+            JOIN FETCH i.manager m
             WHERE i.id = :institutionId and m.id = :managerId and be.id = coalesce(:boxId, be.id)
             """)
     Page<BoxEntity> getBoxFromInstitutionByManager(@Param("institutionId") Long institutionId,

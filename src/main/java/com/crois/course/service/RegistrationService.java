@@ -3,6 +3,7 @@ package com.crois.course.service;
 import com.crois.course.dto.UserDTO.UserRegistrationRequestDTO;
 import com.crois.course.entity.PasswordEntity;
 import com.crois.course.entity.UserEntity;
+import com.crois.course.enums.Role;
 import com.crois.course.mapper.UserMapper;
 import com.crois.course.repositories.UserRepository;
 import jakarta.transaction.Transactional;
@@ -28,7 +29,7 @@ public class RegistrationService {
 
         UserEntity user = userRegistrationMapper.toUserRegistrationEntity(dto);
 
-        userRegistrationMapper.setRolesFromDTO(dto, user);
+        user.setRole(Role.CLIENT);
 
         PasswordEntity password = new PasswordEntity(dto.password());
 

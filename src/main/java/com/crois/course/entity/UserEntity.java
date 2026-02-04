@@ -15,7 +15,6 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class UserEntity {
 
     @Id
@@ -36,7 +35,7 @@ public class UserEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "roles", nullable = false)
-    private List<Role> roles;
+    private Role role;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "password_id", nullable = false)
@@ -49,4 +48,10 @@ public class UserEntity {
             fetch = FetchType.LAZY
     )
     private  List<OrderEntity> orders = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "manager",
+            fetch = FetchType.LAZY
+    )
+    private List<InstitutionEntity> institutionUnderUser;
 }

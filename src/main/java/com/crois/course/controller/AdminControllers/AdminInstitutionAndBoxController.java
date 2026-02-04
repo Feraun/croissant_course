@@ -1,9 +1,8 @@
 package com.crois.course.controller.AdminControllers;
 
-import com.crois.course.dto.BoxDTO.BoxShortResponseDTO;
+import com.crois.course.dto.BoxDTO.BoxResponseDTO;
 import com.crois.course.dto.BoxDTO.CreateBoxDTO;
 import com.crois.course.dto.InstitutionDTO.InstitutionRequestDTO;
-import com.crois.course.dto.InstitutionDTO.InstitutionResponseClient;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseDTO;
 import com.crois.course.service.AdminServices.AdminBoxService;
 import com.crois.course.service.AdminServices.AdminInstitutionService;
@@ -67,7 +66,7 @@ public class AdminInstitutionAndBoxController {
     }
 
     @GetMapping(value = "/{institutionId}/boxes/{boxId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public BoxShortResponseDTO getBoxById(@PathVariable("institutionId") Long institutionId, @PathVariable("boxId") Long boxId){
+    public BoxResponseDTO getBoxById(@PathVariable("institutionId") Long institutionId, @PathVariable("boxId") Long boxId){
         return adminBoxService.getBoxById(institutionId, boxId);
     }
 

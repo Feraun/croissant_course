@@ -7,6 +7,7 @@ import com.crois.course.mapper.CategoryInstitutionMapper;
 import com.crois.course.repositories.CategoryInstitutionRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,8 +19,6 @@ import java.util.List;
 @AllArgsConstructor
 public class AdminCategoryService {
 
-    @PersistenceContext
-    private EntityManager em;
 
     private final CategoryInstitutionMapper categoryInstitutionMapper;
     private final CategoryInstitutionRepository categoryInstitutionRepository;
@@ -33,15 +32,13 @@ public class AdminCategoryService {
         return(categoryInstitutionMapper.createDtoFromEntity(categoryInstitutionEntity));
     }
 
+    @Transactional
     public CategoryInstitutionDTO editCategoryInstitution(Long id, CategoryInstitutionDTO categoryInstitutionDTO){
-        CategoryInstitutionEntity categoryInstitutionEntity = categoryInstitutionRepository.findById(id).orElseThrow();
 
-        categoryInstitutionEntity.setName(categoryInstitutionDTO.name());
-        categoryInstitutionEntity.setDescription(categoryInstitutionDTO.description());
+        categoryInstitutionMapper.updateEntity(categoryInstitutionRepository.getReferenceById(id),
+                categoryInstitutionDTO);
 
-        categoryInstitutionRepository.save(categoryInstitutionEntity);
-
-        return (categoryInstitutionMapper.createDtoFromEntity(categoryInstitutionEntity));
+        return categoryInstitutionDTO;
     }
 
     public CategoryInstitutionDTO getByIdCategoryInstitution(Long id){

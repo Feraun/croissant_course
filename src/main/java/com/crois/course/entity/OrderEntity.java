@@ -13,13 +13,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 
-@NamedEntityGraph(
-        name = "Order.withUserAndBox",
-        attributeNodes = {
-                @NamedAttributeNode("user"),
-                @NamedAttributeNode("box")
-        }
-)
 public class OrderEntity {
 
     @Id

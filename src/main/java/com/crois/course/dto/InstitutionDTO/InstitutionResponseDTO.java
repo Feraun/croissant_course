@@ -1,7 +1,5 @@
 package com.crois.course.dto.InstitutionDTO;
 
-import com.crois.course.dto.BoxDTO.BoxShortResponseDTO;
-import com.crois.course.dto.CategoryInstitutionDTO.CategoryInstitutionDTO;
 import com.crois.course.dto.CategoryInstitutionDTO.ShortCategoryDTO;
 
 import java.util.Date;

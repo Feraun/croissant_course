@@ -1,12 +1,12 @@
 package com.crois.course.mapper;
 
-import com.crois.course.dto.BoxDTO.BoxShortResponseDTO;
+import com.crois.course.dto.BoxDTO.BoxResponseDTO;
 import com.crois.course.dto.BoxDTO.CreateBoxDTO;
-import com.crois.course.dto.BoxDTO.RandomBoxResponseDTO;
 import com.crois.course.entity.BoxEntity;
 import com.crois.course.entity.InstitutionEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface BoxMapper {
@@ -19,11 +19,14 @@ public interface BoxMapper {
     @Mapping(target = "quantity", source = "createBoxDTO.quantity")
     BoxEntity createEntityFromDtoForNewBox(CreateBoxDTO createBoxDTO, InstitutionEntity institution);
 
+    @Mapping(target = "randomly", ignore = true)
+    @Mapping(target = "quantity", ignore = true)
+    BoxEntity updateBox(@MappingTarget BoxEntity boxEntity, CreateBoxDTO createBoxDTO);
+
     CreateBoxDTO createDtoFromEntity(BoxEntity boxEntity);
 
+    BoxResponseDTO createShortDtoFromEntity(BoxEntity boxEntity);
 
-    BoxShortResponseDTO createShortDtoFromEntity(BoxEntity boxEntity);
-
-    RandomBoxResponseDTO createManagersDtoFromEntity(BoxEntity boxEntity);
+    BoxResponseDTO createManagersDtoFromEntity(BoxEntity boxEntity);
 
 }

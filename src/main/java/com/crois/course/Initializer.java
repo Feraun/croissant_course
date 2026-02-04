@@ -22,7 +22,7 @@ public class Initializer {
         UserEntity admin = UserEntity.builder()
                 .username("admin")
                 .enabled(true)
-                .roles(List.of(Role.ADMIN, Role.CLIENT, Role.MANAGER))
+                .role(Role.ADMIN)
                 .firstName("grib")
                 .lastName("artem")
                 .contactNumber("52526")
@@ -37,7 +37,7 @@ public class Initializer {
         UserEntity manager = UserEntity.builder()
                 .username("manager")
                 .enabled(true)
-                .roles(List.of(Role.MANAGER, Role.CLIENT))
+                .role(Role.MANAGER)
                 .createdAt(LocalDateTime.now())
                 .password(new PasswordEntity("1234"))
                 .build();

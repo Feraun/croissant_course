@@ -1,7 +1,7 @@
 package com.crois.course.service.ManagerServices;
 
+import com.crois.course.dto.BoxDTO.BoxResponseDTO;
 import com.crois.course.dto.BoxDTO.CreateBoxDTO;
-import com.crois.course.dto.BoxDTO.RandomBoxResponseDTO;
 import com.crois.course.dto.UserDTO.AuthUser;
 import com.crois.course.entity.BoxEntity;
 import com.crois.course.mapper.BoxMapper;
@@ -16,8 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -49,7 +47,7 @@ public class ManagerBoxService {
         );
     }
 
-    public Page<RandomBoxResponseDTO> getAllBox(Long institutionId, Long boxId, Authentication authentication, Pageable pageable){
+    public Page<BoxResponseDTO> getAllBox(Long institutionId, Long boxId, Authentication authentication, Pageable pageable){
 
         AuthUser authUser = (AuthUser) authentication.getPrincipal();
 

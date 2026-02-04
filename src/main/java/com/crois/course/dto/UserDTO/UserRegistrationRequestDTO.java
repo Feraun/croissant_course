@@ -8,6 +8,5 @@ public record UserRegistrationRequestDTO (
         String username,
         String contactNumber,
         String firstName,
-        String lastName,
-        List<String> roles
+        String lastName
 ) { }

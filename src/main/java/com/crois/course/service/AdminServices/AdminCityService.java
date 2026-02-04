@@ -6,6 +6,7 @@ import com.crois.course.mapper.CityMapper;
 import com.crois.course.repositories.CityRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,15 +30,12 @@ public class AdminCityService {
         return (cityMapper.createDtoFromEntity(cityEntity));
     }
 
+    @Transactional
     public CityDTO editCity(Long id, CityDTO cityDTO){
-        //todo кастомные эксепшн
-        CityEntity cityEntity = cityRepository.findById(id).orElseThrow();
 
-        cityEntity.setRegion(cityDTO.region());
-        cityEntity.setName(cityDTO.name());
+        cityMapper.updateEntity(cityRepository.getReferenceById(id), cityDTO);
 
-        cityRepository.save(cityEntity);
-        return (cityMapper.createDtoFromEntity(cityEntity));
+        return cityDTO;
 
     }
 

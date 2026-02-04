@@ -1,11 +1,12 @@
 package com.crois.course.service.AdminServices;
 
-import com.crois.course.dto.BoxDTO.BoxShortResponseDTO;
+import com.crois.course.dto.BoxDTO.BoxResponseDTO;
 import com.crois.course.dto.BoxDTO.CreateBoxDTO;
 import com.crois.course.entity.*;
 import com.crois.course.mapper.BoxMapper;
 import com.crois.course.repositories.BoxRepository;
 import com.crois.course.repositories.InstitutionRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -31,19 +32,15 @@ public class AdminBoxService {
 
     }
 
+    @Transactional
     public CreateBoxDTO editBox(Long institutionId, Long boxId, CreateBoxDTO createBoxDTO){
-        BoxEntity boxEntity = boxRepository.findById(boxId).orElseThrow();
 
-        boxEntity.setName(createBoxDTO.name());
-        boxEntity.setDescription(createBoxDTO.description());
-        boxEntity.setPrice(createBoxDTO.price());
+        boxMapper.updateBox(boxRepository.getReferenceById(boxId), createBoxDTO);
 
-        boxRepository.save(boxEntity);
-
-        return boxMapper.createDtoFromEntity(boxEntity);
+        return createBoxDTO;
     }
 
-    public BoxShortResponseDTO getBoxById(Long institutionId, Long boxId){
+    public BoxResponseDTO getBoxById(Long institutionId, Long boxId){
         return boxRepository.findByIdAndInstitutionId(boxId, institutionId)
                 .map(boxMapper::createShortDtoFromEntity)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Box not found"));
