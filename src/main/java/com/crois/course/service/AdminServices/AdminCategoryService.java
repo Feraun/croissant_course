@@ -3,10 +3,9 @@ package com.crois.course.service.AdminServices;
 import com.crois.course.dto.CategoryInstitutionDTO.CategoryInstitutionDTO;
 
 import com.crois.course.entity.CategoryInstitutionEntity;
+import com.crois.course.exceptions.NotFoundException;
 import com.crois.course.mapper.CategoryInstitutionMapper;
 import com.crois.course.repositories.CategoryInstitutionRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -42,7 +41,10 @@ public class AdminCategoryService {
     }
 
     public CategoryInstitutionDTO getByIdCategoryInstitution(Long id){
-        CategoryInstitutionEntity categoryInstitutionEntity = categoryInstitutionRepository.findById(id).orElseThrow();
+        CategoryInstitutionEntity categoryInstitutionEntity = categoryInstitutionRepository
+                .findById(id)
+                .orElseThrow(()->new NotFoundException("Category of Institution not found"));
+
         return (categoryInstitutionMapper.createDtoFromEntity(categoryInstitutionEntity));
     }
 

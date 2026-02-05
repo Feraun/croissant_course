@@ -1,5 +1,6 @@
 package com.crois.course.mapper;
 import com.crois.course.dto.UserDTO.UserDTOForAddManagerToInstitution;
+import com.crois.course.dto.UserDTO.UserFullDTO;
 import com.crois.course.dto.UserDTO.UserProfileDTO;
 import com.crois.course.dto.UserDTO.UserRegistrationRequestDTO;
 import com.crois.course.enums.Role;
@@ -29,4 +30,6 @@ public interface UserMapper {
     UserProfileDTO createUserProfileDtoFromEntity(UserEntity userEntity);
 
     UserDTOForAddManagerToInstitution createUserForAddToInstDTO(UserEntity userEntity);
+
+    UserFullDTO toUserFullDTO(UserEntity userEntity);
 }

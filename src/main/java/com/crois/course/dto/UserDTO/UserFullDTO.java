@@ -1,5 +1,7 @@
 package com.crois.course.dto.UserDTO;
 
+import com.crois.course.enums.Role;
+
 import java.util.List;
 
 public record UserFullDTO(
@@ -10,6 +12,6 @@ public record UserFullDTO(
         String contactNumber,
         String email,
         String createdAt,
-        List<String> roles
+        Role role
 ) {
 }

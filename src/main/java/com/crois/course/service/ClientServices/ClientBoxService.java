@@ -6,6 +6,7 @@ import com.crois.course.dto.UserDTO.AuthUser;
 import com.crois.course.entity.BoxEntity;
 import com.crois.course.entity.OrderEntity;
 import com.crois.course.entity.UserEntity;
+import com.crois.course.exceptions.NotFoundException;
 import com.crois.course.mapper.BoxMapper;
 import com.crois.course.mapper.OrderMapper;
 import com.crois.course.repositories.BoxRepository;
@@ -13,11 +14,9 @@ import com.crois.course.repositories.OrderRepository;
 import com.crois.course.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 
@@ -36,14 +35,14 @@ public class ClientBoxService {
     public BoxResponseDTO getBoxById(@PathVariable("institutionId") Long institutionId, @PathVariable("boxId") Long boxId){
         return boxRepository.findByIdAndInstitutionId(boxId, institutionId)
                 .map(boxMapper::createShortDtoFromEntity)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Box not found"));
+                .orElseThrow(()->new NotFoundException("City not found"));
 
     }
 
     @Transactional
     public OrderDTO buyBox(@PathVariable("boxId") Long boxId, Authentication authentication){
 
-        BoxEntity boxEntity = boxRepository.findById(boxId).orElseThrow();
+        BoxEntity boxEntity = boxRepository.findById(boxId).orElseThrow(()->new NotFoundException("Box not found"));
 
         boxEntity.setQuantity(boxEntity.getQuantity() - 1);
 

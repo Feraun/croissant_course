@@ -2,6 +2,7 @@ package com.crois.course.service.ClientServices;
 
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseClient;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseDTO;
+import com.crois.course.exceptions.NotFoundException;
 import com.crois.course.mapper.InstitutionMapper;
 import com.crois.course.repositories.InstitutionRepository;
 import lombok.AllArgsConstructor;
@@ -30,7 +31,7 @@ public class ClientInstitutionService {
     }
 
     public InstitutionResponseDTO getInstitutionById(@PathVariable("id") Long id){
-        return(institutionMapper.createDtoFromEntity(institutionRepository.findById(id).orElseThrow()));
+        return(institutionMapper.createDtoFromEntity(institutionRepository.findById(id).orElseThrow(()->new NotFoundException("Institution not found"))));
     }
 
 }

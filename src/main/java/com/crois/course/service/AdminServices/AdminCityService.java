@@ -2,6 +2,7 @@ package com.crois.course.service.AdminServices;
 
 import com.crois.course.dto.CityDTO.CityDTO;
 import com.crois.course.entity.CityEntity;
+import com.crois.course.exceptions.NotFoundException;
 import com.crois.course.mapper.CityMapper;
 import com.crois.course.repositories.CityRepository;
 import jakarta.persistence.EntityManager;
@@ -40,7 +41,7 @@ public class AdminCityService {
     }
 
     public CityDTO getCityById(Long id){
-        return (cityMapper.createDtoFromEntity(cityRepository.findById(id).orElseThrow()));
+        return (cityMapper.createDtoFromEntity(cityRepository.findById(id).orElseThrow(()->new NotFoundException("City not found"))));
     }
 
     public Long deleteCityById(Long id){
@@ -59,5 +60,4 @@ public class AdminCityService {
                 .map(cityMapper::createDtoFromEntity)
                 .toList();
     }
-
 }

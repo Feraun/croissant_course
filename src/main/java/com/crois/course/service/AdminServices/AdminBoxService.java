@@ -3,14 +3,13 @@ package com.crois.course.service.AdminServices;
 import com.crois.course.dto.BoxDTO.BoxResponseDTO;
 import com.crois.course.dto.BoxDTO.CreateBoxDTO;
 import com.crois.course.entity.*;
+import com.crois.course.exceptions.NotFoundException;
 import com.crois.course.mapper.BoxMapper;
 import com.crois.course.repositories.BoxRepository;
 import com.crois.course.repositories.InstitutionRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @AllArgsConstructor
@@ -43,8 +42,7 @@ public class AdminBoxService {
     public BoxResponseDTO getBoxById(Long institutionId, Long boxId){
         return boxRepository.findByIdAndInstitutionId(boxId, institutionId)
                 .map(boxMapper::createShortDtoFromEntity)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Box not found"));
-
+                .orElseThrow(() -> new NotFoundException("Box not found"));
     }
 
     public Long deleteBoxById(Long institutionId, Long boxId){
@@ -55,7 +53,7 @@ public class AdminBoxService {
             return boxId;
         }
         else{
-            throw new RuntimeException("Бокса нет");
+            throw new NotFoundException("Box not found");
         }
     }
 }

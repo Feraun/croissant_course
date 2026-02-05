@@ -4,6 +4,7 @@ import com.crois.course.dto.InstitutionDTO.InstitutionRequestDTO;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseDTO;
 import com.crois.course.entity.*;
 import com.crois.course.enums.Role;
+import com.crois.course.exceptions.NotFoundException;
 import com.crois.course.mapper.InstitutionMapper;
 import com.crois.course.repositories.CategoryInstitutionRepository;
 import com.crois.course.repositories.CityRepository;
@@ -11,17 +12,14 @@ import com.crois.course.repositories.InstitutionRepository;
 import com.crois.course.repositories.UserRepository;
 import com.crois.course.service.MinioService;
 import lombok.AllArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -119,7 +117,7 @@ public class AdminInstitutionService {
     }
 
     public InstitutionResponseDTO getInstitutionById(Long id){
-        return(institutionMapper.createDtoFromEntity(institutionRepository.findById(id).orElseThrow()));
+        return(institutionMapper.createDtoFromEntity(institutionRepository.findById(id).orElseThrow(()->new NotFoundException("Institution not found"))));
     }
 
     public Long deleteInstitutionById(Long id){
