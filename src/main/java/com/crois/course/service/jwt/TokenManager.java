@@ -27,7 +27,7 @@ public class TokenManager {
         Map<String, Object> claims = new HashMap<>();
 
         claims.put(
-                "roles",
+                "role",
                 userDetails.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)
                         .toList()

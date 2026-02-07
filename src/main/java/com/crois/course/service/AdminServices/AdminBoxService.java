@@ -47,13 +47,13 @@ public class AdminBoxService {
 
     public Long deleteBoxById(Long institutionId, Long boxId){
 
-        //todo сделать sql запрос с поиском и удалением сразу
-        if (boxRepository.existsByIdAndInstitutionId(boxId, institutionId)){
-            boxRepository.deleteById(boxId);
-            return boxId;
+        int deleteResult = boxRepository.deleteBoxById(boxId, institutionId);
+
+        if(deleteResult == 0){
+            throw new NotFoundException("Box not found");
         }
         else{
-            throw new NotFoundException("Box not found");
+            return boxId;
         }
     }
 }

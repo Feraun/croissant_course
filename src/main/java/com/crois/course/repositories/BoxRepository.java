@@ -1,10 +1,12 @@
 package com.crois.course.repositories;
 
 import com.crois.course.entity.BoxEntity;
+import com.crois.course.exceptions.NotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -12,13 +14,17 @@ import java.util.Optional;
 
 public interface BoxRepository extends JpaRepository<BoxEntity, Long> {
 
-
-    // Spring сам поймет: "проверь существование по ID и полю institutionId"
-    @EntityGraph(attributePaths = "institution")
-    boolean existsByIdAndInstitutionId(Long id, Long institutionId);
-
-    @EntityGraph(attributePaths = "institution")
     Optional<BoxEntity> findByIdAndInstitutionId(Long id, Long institutionId);
+
+    @Modifying
+    @Transactional
+    @Query("""
+            DELETE FROM BoxEntity be
+            WHERE be.id = :boxId
+            AND be.institution.id = :institutionId
+            """)
+    int deleteBoxById(@Param("boxId") Long boxId,
+                       @Param("institutionId") Long institutionId) throws NotFoundException;
 
 
     @Query("""
