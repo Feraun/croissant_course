@@ -1,9 +1,6 @@
 package com.crois.course.mapper;
 
-import com.crois.course.dto.InstitutionDTO.InstitutionRequestDTO;
-import com.crois.course.dto.InstitutionDTO.InstitutionResponseClient;
-import com.crois.course.dto.InstitutionDTO.InstitutionResponseDTO;
-import com.crois.course.dto.InstitutionDTO.InstitutionResponseManagerForGetAll;
+import com.crois.course.dto.InstitutionDTO.*;
 import com.crois.course.entity.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -34,10 +31,18 @@ public interface InstitutionMapper {
                                           CityEntity cityEntity
     );
 
-    InstitutionResponseClient createDtoForClient(InstitutionEntity institution);
+    InstitutionResponseClientGetAll createDtoForClient(InstitutionEntity institution);
+
+    @Mapping(target = "name", source = "institution.name")
+    @Mapping(target = "address", source = "institution.address")
+    @Mapping(target = "rating", source = "institution.rating")
+    @Mapping(target = "contactNumber", source = "institution.contactNumber")
+    @Mapping(target = "categories", source = "institution.categories")
+    @Mapping(target = "boxes", source = "boxEntities")
+    InstitutionResponseClient createDtoForClientById(InstitutionEntity institution, List<BoxEntity> boxEntities);
 
     @Mapping(target = "logoImage", source = "logo.id")
-    @Mapping(target = "cityId", source = "city.id")
+    @Mapping(target = "cityName", source = "city.name")
     InstitutionResponseDTO createDtoFromEntity( InstitutionEntity institution);
 
 

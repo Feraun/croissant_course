@@ -1,5 +1,6 @@
 package com.crois.course.dto.InstitutionDTO;
 
+import com.crois.course.dto.BoxDTO.BoxResponseDTO;
 import com.crois.course.dto.CategoryInstitutionDTO.CategoryInstitutionDTO;
 
 import java.util.List;
@@ -10,5 +11,6 @@ public record InstitutionResponseClient(
         String address,
         Double rating,
         String contactNumber,
-        List<CategoryInstitutionDTO> categories
+        List<CategoryInstitutionDTO> categories,
+        List<BoxResponseDTO> boxes
 ) {}

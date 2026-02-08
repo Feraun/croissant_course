@@ -35,7 +35,7 @@ public class ClientBoxService {
     public BoxResponseDTO getBoxById(@PathVariable("institutionId") Long institutionId, @PathVariable("boxId") Long boxId){
         return boxRepository.findByIdAndInstitutionId(boxId, institutionId)
                 .map(boxMapper::createShortDtoFromEntity)
-                .orElseThrow(()->new NotFoundException("City not found"));
+                .orElseThrow(()->new NotFoundException("Box not found"));
 
     }
 

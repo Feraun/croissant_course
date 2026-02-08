@@ -2,6 +2,8 @@ package com.crois.course.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -50,9 +52,9 @@ public class InstitutionEntity {
     @OneToMany(
             mappedBy = "institution",
             cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY
+            orphanRemoval = true
     )
+    @Fetch(value = FetchMode.SUBSELECT)
     private  List<BoxEntity> boxes = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL,

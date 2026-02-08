@@ -12,10 +12,10 @@ public interface CityRepository extends JpaRepository<CityEntity, Long> {
     @Query("""
             SELECT ce FROM CityEntity ce
             WHERE (ce.id = coalesce(:cityId, ce.id))
-            AND lower(ce.name) LIKE lower(concat('%', coalesce(:cityName, ''), '%'))
+            AND lower(ce.name) LIKE lower(concat('%', coalesce(:name, ''), '%'))
             """)
     Page<CityEntity> searchCities(@Param("cityId") Long cityId,
-                                  @Param("cityName") String cityName,
+                                  @Param("name") String cityName,
                                   Pageable pageable);
 
 }

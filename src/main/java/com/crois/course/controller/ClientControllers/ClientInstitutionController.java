@@ -2,6 +2,7 @@ package com.crois.course.controller.ClientControllers;
 
 import com.crois.course.dto.BoxDTO.BoxResponseDTO;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseClient;
+import com.crois.course.dto.InstitutionDTO.InstitutionResponseClientGetAll;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseDTO;
 import com.crois.course.service.ClientServices.ClientBoxService;
 import com.crois.course.service.ClientServices.ClientInstitutionService;
@@ -20,7 +21,7 @@ public class ClientInstitutionController {
     private final ClientBoxService clientBoxService;
 
     @GetMapping()
-    public Page<InstitutionResponseClient> searchInstitutions(
+    public Page<InstitutionResponseClientGetAll> searchInstitutions(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String address,
             @RequestParam(required = false) String city,
@@ -32,7 +33,7 @@ public class ClientInstitutionController {
     }
 
     @GetMapping(value = "/{id}")
-    public InstitutionResponseDTO getInstitutionById(@PathVariable("id") Long id){
+    public InstitutionResponseClient getInstitutionById(@PathVariable("id") Long id){
         return (clientInstitutionService.getInstitutionById(id));
     }
 

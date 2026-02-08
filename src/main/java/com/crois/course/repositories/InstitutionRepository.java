@@ -1,6 +1,7 @@
 package com.crois.course.repositories;
 
 import com.crois.course.entity.InstitutionEntity;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,7 +21,7 @@ public interface InstitutionRepository extends JpaRepository<InstitutionEntity, 
     @Query("""
             SELECT ie FROM InstitutionEntity ie
             JOIN FETCH ie.categories
-            JOIN ie.city c
+            JOIN FETCH ie.city c
             WHERE lower(ie.name) LIKE lower(concat('%', coalesce(:name, ''), '%'))
             AND lower(ie.address) LIKE lower(concat('%', coalesce(:address, ''), '%'))
             AND lower(ie.contactNumber) LIKE lower(concat('%', coalesce(:contactNumber, ''), '%'))
@@ -41,5 +42,21 @@ public interface InstitutionRepository extends JpaRepository<InstitutionEntity, 
             """)
     Page<InstitutionEntity> searchInstitutionByManager(@Param("managerId") Long managerId,
                                                      Pageable pageable);
+
+    @NotNull
+    @Query("""
+            SELECT ie FROM InstitutionEntity ie
+            JOIN FETCH ie.categories
+            WHERE ie.id = :institutionId
+            """)
+    InstitutionEntity getInstitutionsFetchCategories(@NotNull @Param("institutionId") Long institutionId);
+
+    @NotNull
+    @Query("""
+            SELECT ie FROM InstitutionEntity ie
+            JOIN FETCH ie.categories
+            WHERE ie.id = :institutionId
+            """)
+    InstitutionEntity getInstitutionsFetchBoxes(@NotNull @Param("institutionId") Long institutionId);
 
 }

@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.swing.*;
+import java.util.List;
 import java.util.Optional;
 
 public interface BoxRepository extends JpaRepository<BoxEntity, Long> {
@@ -26,6 +28,12 @@ public interface BoxRepository extends JpaRepository<BoxEntity, Long> {
     int deleteBoxById(@Param("boxId") Long boxId,
                        @Param("institutionId") Long institutionId) throws NotFoundException;
 
+    @Query("""
+            SELECT be FROM BoxEntity be
+            JOIN be.institution i
+            WHERE i.id = :institutionId
+            """)
+    List<BoxEntity> getBoxesFromInstitutions(@Param("institutionId") Long institutionId);
 
     @Query("""
             SELECT be FROM BoxEntity be
