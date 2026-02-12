@@ -11,17 +11,14 @@ import org.mapstruct.MappingTarget;
 public interface BoxMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "institutionId", source = "institutionId")
-    @Mapping(target = "name", source = "createBoxDTO.name")
-    @Mapping(target = "description", source = "createBoxDTO.description")
-    @Mapping(target = "price" , source = "createBoxDTO.price")
-    @Mapping(target = "quantity", source = "createBoxDTO.quantity")
+    @Mapping(target = "institution", ignore = true)
     BoxEntity createEntityFromDtoForNewBox(CreateBoxDTO createBoxDTO, Long institutionId);
 
     @Mapping(target = "randomly", ignore = true)
     @Mapping(target = "quantity", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "institution", ignore = true)
+    @Mapping(target = "institutionId", ignore = true)
     BoxEntity updateBox(@MappingTarget BoxEntity boxEntity, CreateBoxDTO createBoxDTO);
 
     CreateBoxDTO createDtoFromEntity(BoxEntity boxEntity);

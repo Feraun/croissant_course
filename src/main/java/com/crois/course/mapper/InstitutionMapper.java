@@ -15,20 +15,15 @@ public interface InstitutionMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "boxes", ignore = true)
-    @Mapping(target = "name", source = "dto.name")
-    @Mapping(target = "address", source = "dto.address")
-    @Mapping(target = "rating", source = "dto.rating")
-    @Mapping(target = "contactNumber", source = "dto.contactNumber")
-    @Mapping(target = "cityId", source = "cityId")
+    @Mapping(target = "city", ignore = true)
+    @Mapping(target = "manager", ignore = true)
+    @Mapping(target = "logo", ignore = true)
     @Mapping(target = "categories", source = "categoryInstitutionEntityList")
-    @Mapping(target = "managerId", source = "managerId")
-    @Mapping(target = "createdAt", source = "localDateTime")
-    @Mapping(target = "logoId", source = "imageId")
     InstitutionEntity createEntityFromDTO(InstitutionRequestDTO dto,
                                           List<CategoryInstitutionEntity> categoryInstitutionEntityList,
                                           Long managerId,
-                                          LocalDateTime localDateTime,
-                                          UUID imageId,
+                                          LocalDateTime createdAt,
+                                          UUID logoId,
                                           Long cityId
     );
 
@@ -49,14 +44,11 @@ public interface InstitutionMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "boxes", ignore = true)
     @Mapping(target = "logo", ignore = true)
+    @Mapping(target = "logoId", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "name", source = "dto.name")
-    @Mapping(target = "address", source = "dto.address")
-    @Mapping(target = "rating", source = "dto.rating")
-    @Mapping(target = "contactNumber", source = "dto.contactNumber")
-    @Mapping(target = "cityId", source = "cityId")
+    @Mapping(target = "manager", ignore = true)
+    @Mapping(target = "city", ignore = true)
     @Mapping(target = "categories", source = "categoryInstitutionEntityList")
-    @Mapping(target = "managerId", source = "managerId")
     InstitutionEntity updateEntity(@MappingTarget InstitutionEntity institutionEntity,
                                    InstitutionRequestDTO dto,
                                    List<CategoryInstitutionEntity> categoryInstitutionEntityList,

@@ -6,6 +6,7 @@ import com.crois.course.entity.OrderEntity;
 import com.crois.course.entity.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import java.time.LocalDateTime;
 
