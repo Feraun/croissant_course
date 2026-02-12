@@ -3,7 +3,6 @@ package com.crois.course.mapper;
 import com.crois.course.dto.BoxDTO.BoxResponseDTO;
 import com.crois.course.dto.BoxDTO.CreateBoxDTO;
 import com.crois.course.entity.BoxEntity;
-import com.crois.course.entity.InstitutionEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -12,12 +11,12 @@ import org.mapstruct.MappingTarget;
 public interface BoxMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "institution", source = "institution")
+    @Mapping(target = "institutionId", source = "institutionId")
     @Mapping(target = "name", source = "createBoxDTO.name")
     @Mapping(target = "description", source = "createBoxDTO.description")
     @Mapping(target = "price" , source = "createBoxDTO.price")
     @Mapping(target = "quantity", source = "createBoxDTO.quantity")
-    BoxEntity createEntityFromDtoForNewBox(CreateBoxDTO createBoxDTO, InstitutionEntity institution);
+    BoxEntity createEntityFromDtoForNewBox(CreateBoxDTO createBoxDTO, Long institutionId);
 
     @Mapping(target = "randomly", ignore = true)
     @Mapping(target = "quantity", ignore = true)

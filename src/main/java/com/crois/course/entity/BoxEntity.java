@@ -28,8 +28,9 @@ public class BoxEntity {
     private Integer quantity;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "institution_id", nullable = false)
+    @JoinColumn(name = "institution_id", insertable = false, updatable = false)
     private InstitutionEntity institution;
 
-    //todo доделать ProductEntity
+    @Column(name = "institution_id", nullable = false)
+    private Long institutionId;
 }

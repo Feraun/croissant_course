@@ -30,7 +30,7 @@ public class ManagerBoxService {
         if (institutionRepository.existsByIdAndManagerId(institutionId, authUser.getId())){
             BoxEntity boxEntity = boxMapper.createEntityFromDtoForNewBox(
                     createBoxDTO,
-                    institutionRepository.getReferenceById(institutionId));
+                    institutionId);
 
             boxRepository.save(boxEntity);
 

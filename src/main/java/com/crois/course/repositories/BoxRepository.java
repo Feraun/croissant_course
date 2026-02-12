@@ -23,10 +23,8 @@ public interface BoxRepository extends JpaRepository<BoxEntity, Long> {
     @Query("""
             DELETE FROM BoxEntity be
             WHERE be.id = :boxId
-            AND be.institution.id = :institutionId
             """)
-    int deleteBoxById(@Param("boxId") Long boxId,
-                       @Param("institutionId") Long institutionId) throws NotFoundException;
+    int deleteBoxById(@Param("boxId") Long boxId);
 
     @Query("""
             SELECT be FROM BoxEntity be
@@ -38,8 +36,8 @@ public interface BoxRepository extends JpaRepository<BoxEntity, Long> {
     @Query("""
             SELECT be FROM BoxEntity be
             JOIN FETCH be.institution i
-            JOIN FETCH i.manager m
-            WHERE i.id = :institutionId and m.id = :managerId and be.id = coalesce(:boxId, be.id)
+            WHERE i.id = :institutionId and i.managerId = :managerId
+            AND be.id = coalesce(:boxId, be.id)
             """)
     Page<BoxEntity> getBoxFromInstitutionByManager(@Param("institutionId") Long institutionId,
                                                    @Param("managerId") Long managerId,

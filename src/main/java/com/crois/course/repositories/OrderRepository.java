@@ -27,8 +27,8 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
             JOIN FETCH oe.user u
             JOIN b.institution i
             WHERE EXISTS (
-                SELECT 1 FROM i.manager m
-                WHERE m.id = :managerId
+                SELECT 1 FROM i.managerId
+                WHERE i.managerId = :managerId
             )
             AND (oe.id = coalesce(:id, oe.id))
             """)

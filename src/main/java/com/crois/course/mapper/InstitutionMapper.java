@@ -8,6 +8,7 @@ import org.mapstruct.MappingTarget;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Mapper(componentModel = "spring")
 public interface InstitutionMapper {
@@ -18,17 +19,17 @@ public interface InstitutionMapper {
     @Mapping(target = "address", source = "dto.address")
     @Mapping(target = "rating", source = "dto.rating")
     @Mapping(target = "contactNumber", source = "dto.contactNumber")
-    @Mapping(target = "city", source = "cityEntity")
+    @Mapping(target = "cityId", source = "cityId")
     @Mapping(target = "categories", source = "categoryInstitutionEntityList")
-    @Mapping(target = "manager", source = "manager")
+    @Mapping(target = "managerId", source = "managerId")
     @Mapping(target = "createdAt", source = "localDateTime")
-    @Mapping(target = "logo", source = "imageEntity")
+    @Mapping(target = "logoId", source = "imageId")
     InstitutionEntity createEntityFromDTO(InstitutionRequestDTO dto,
                                           List<CategoryInstitutionEntity> categoryInstitutionEntityList,
-                                          UserEntity manager,
+                                          Long managerId,
                                           LocalDateTime localDateTime,
-                                          ImageEntity imageEntity,
-                                          CityEntity cityEntity
+                                          UUID imageId,
+                                          Long cityId
     );
 
     InstitutionResponseClientGetAll createDtoForClient(InstitutionEntity institution);
@@ -41,7 +42,6 @@ public interface InstitutionMapper {
     @Mapping(target = "boxes", source = "boxEntities")
     InstitutionResponseClient createDtoForClientById(InstitutionEntity institution, List<BoxEntity> boxEntities);
 
-    @Mapping(target = "logoImage", source = "logo.id")
     @Mapping(target = "cityName", source = "city.name")
     InstitutionResponseDTO createDtoFromEntity( InstitutionEntity institution);
 
@@ -54,14 +54,14 @@ public interface InstitutionMapper {
     @Mapping(target = "address", source = "dto.address")
     @Mapping(target = "rating", source = "dto.rating")
     @Mapping(target = "contactNumber", source = "dto.contactNumber")
-    @Mapping(target = "city", source = "cityEntity")
+    @Mapping(target = "cityId", source = "cityId")
     @Mapping(target = "categories", source = "categoryInstitutionEntityList")
-    @Mapping(target = "manager", source = "manager")
+    @Mapping(target = "managerId", source = "managerId")
     InstitutionEntity updateEntity(@MappingTarget InstitutionEntity institutionEntity,
                                    InstitutionRequestDTO dto,
                                    List<CategoryInstitutionEntity> categoryInstitutionEntityList,
-                                   UserEntity manager,
-                                   CityEntity cityEntity
+                                   Long managerId,
+                                   Long cityId
     );
 
 

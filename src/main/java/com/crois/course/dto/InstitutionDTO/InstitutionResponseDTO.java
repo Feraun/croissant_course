@@ -5,6 +5,7 @@ import com.crois.course.dto.CategoryInstitutionDTO.CategoryInstitutionDTO;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public record InstitutionResponseDTO(
         Long id,
@@ -15,5 +16,5 @@ public record InstitutionResponseDTO(
         String contactNumber,
         Date createdAt,
         List<CategoryInstitutionDTO> categories,
-        String logoImage
+        UUID logoId
 ) { }

@@ -23,11 +23,11 @@ public class AdminCategoryController {
 
     @GetMapping()
     public Page<CategoryInstitutionDTO> searchCategoriesInstitution(
-            @RequestParam(required = false) String categoryName,
+            @RequestParam(required = false) String name,
             @RequestParam(required = false) Long categoryId,
             @PageableDefault Pageable pageable
             ) {
-        return adminCategoryService.searchCategoryOfInstitution(categoryId, categoryName, pageable);
+        return adminCategoryService.searchCategoryOfInstitution(categoryId, name, pageable);
     }
 
     @PostMapping(value = "/createCategory")

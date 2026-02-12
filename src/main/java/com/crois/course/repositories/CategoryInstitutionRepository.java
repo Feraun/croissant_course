@@ -12,10 +12,10 @@ public interface CategoryInstitutionRepository extends JpaRepository<CategoryIns
     @Query("""
             SELECT ce FROM CategoryInstitutionEntity ce
             WHERE (ce.id = coalesce(:categoryId, ce.id))
-            AND lower(ce.name) LIKE lower(concat('%', coalesce(:categoryName, ''), '%'))
+            AND lower(ce.name) LIKE lower(concat('%', coalesce(:name, ''), '%'))
             """)
     Page<CategoryInstitutionEntity> searchCategories(@Param("categoryId") Long categoryId,
-                                  @Param("categoryName") String categoryName,
+                                  @Param("name") String name,
                                   Pageable pageable);
 
 }

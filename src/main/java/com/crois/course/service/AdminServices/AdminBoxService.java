@@ -7,8 +7,11 @@ import com.crois.course.exceptions.NotFoundException;
 import com.crois.course.mapper.BoxMapper;
 import com.crois.course.repositories.BoxRepository;
 import com.crois.course.repositories.InstitutionRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,8 +25,7 @@ public class AdminBoxService {
 
     public CreateBoxDTO createBox(Long institutionId, CreateBoxDTO createBoxDTO){
         BoxEntity boxEntity = boxMapper.createEntityFromDtoForNewBox(
-                                createBoxDTO,
-                                institutionRepository.getReferenceById(institutionId));
+                                createBoxDTO, institutionId);
 
         boxRepository.save(boxEntity);
 
@@ -34,6 +36,7 @@ public class AdminBoxService {
     @Transactional
     public CreateBoxDTO editBox(Long institutionId, Long boxId, CreateBoxDTO createBoxDTO){
 
+        //todo
         boxMapper.updateBox(boxRepository.getReferenceById(boxId), createBoxDTO);
 
         return createBoxDTO;
@@ -45,15 +48,10 @@ public class AdminBoxService {
                 .orElseThrow(() -> new NotFoundException("Box not found"));
     }
 
-    public Long deleteBoxById(Long institutionId, Long boxId){
-
-        int deleteResult = boxRepository.deleteBoxById(boxId, institutionId);
-
-        if(deleteResult == 0){
-            throw new NotFoundException("Box not found");
-        }
-        else{
+    public Long deleteBoxById(Long boxId) {
+        if (boxRepository.deleteBoxById(boxId) == 1){
             return boxId;
         }
+        else throw new NotFoundException("Box with id " + boxId + " not found");
     }
 }

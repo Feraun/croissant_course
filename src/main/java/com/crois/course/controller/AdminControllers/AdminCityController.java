@@ -23,6 +23,7 @@ public class AdminCityController {
 
     @GetMapping()
     public Page<CityDTO> searchCategoriesInstitution(
+            //todo cityname, cityid
             @RequestParam(required = false) String cityName,
             @RequestParam(required = false) Long cityId,
             @PageableDefault Pageable pageable

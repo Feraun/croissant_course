@@ -34,7 +34,7 @@ public class ClientInstitutionController {
 
     @GetMapping(value = "/{id}")
     public InstitutionResponseClient getInstitutionById(@PathVariable("id") Long id){
-        return (clientInstitutionService.getInstitutionById(id));
+        return clientInstitutionService.getInstitutionById(id);
     }
 
     @GetMapping(value = "/{institutionId}/boxes/{boxId}")

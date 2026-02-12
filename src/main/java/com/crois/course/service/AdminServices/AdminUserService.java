@@ -26,9 +26,7 @@ public class AdminUserService {
     }
 
     public UserFullDTO getUserById(Long id){
-
         UserEntity userEntity = userRepository.findById(id).orElseThrow(()->new NotFoundException("User not found"));
-
         return userMapper.toUserFullDTO(userEntity);
     }
 

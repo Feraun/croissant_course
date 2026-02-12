@@ -13,6 +13,7 @@ public interface CategoryInstitutionMapper {
     @Mapping(target = "institutions", ignore = true)
     CategoryInstitutionEntity createEntityFromDTO(CategoryInstitutionDTO categoryInstitutionDTO);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "institutions", ignore = true)
     CategoryInstitutionEntity updateEntity(@MappingTarget CategoryInstitutionEntity categoryInstitutionEntity,
                                            CategoryInstitutionDTO categoryInstitutionDTO);

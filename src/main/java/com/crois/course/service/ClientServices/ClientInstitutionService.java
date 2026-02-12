@@ -46,7 +46,7 @@ public class ClientInstitutionService {
 
 
 
-        return(institutionMapper.createDtoForClientById(institutionEntity, boxEntityList));
+        return institutionMapper.createDtoForClientById(institutionEntity, boxEntityList);
     }
 
 }

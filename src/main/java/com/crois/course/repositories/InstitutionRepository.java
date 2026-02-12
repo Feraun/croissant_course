@@ -37,8 +37,7 @@ public interface InstitutionRepository extends JpaRepository<InstitutionEntity, 
 
     @Query("""
             SELECT ie FROM InstitutionEntity ie
-            JOIN FETCH ie.manager m
-            WHERE m.id = :managerId
+            WHERE ie.managerId = :managerId
             """)
     Page<InstitutionEntity> searchInstitutionByManager(@Param("managerId") Long managerId,
                                                      Pageable pageable);

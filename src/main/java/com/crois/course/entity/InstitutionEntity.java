@@ -8,6 +8,7 @@ import org.hibernate.annotations.FetchMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "institutions")
@@ -31,15 +32,19 @@ public class InstitutionEntity {
     )
     private List<CategoryInstitutionEntity> categories = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-            name = "user_id"
-    )
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private UserEntity manager;
 
+    @Column(name = "user_id", nullable = false)
+    private Long managerId;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "city_id", nullable = false)
+    @JoinColumn(name = "city_id", insertable = false, updatable = false)
     private CityEntity city;
+
+    @Column(name = "city_id", nullable = false)
+    private Long cityId;
 
     private String address;
 
@@ -59,6 +64,9 @@ public class InstitutionEntity {
 
     @OneToOne(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
-    @JoinColumn(name = "image_id", nullable = false)
+    @JoinColumn(name = "image_id", insertable = false, updatable = false)
     private ImageEntity logo;
+
+    @Column(name = "image_id", nullable = false)
+    private UUID logoId;
 }

@@ -32,6 +32,4 @@ public class CityEntity {
             orphanRemoval = true
     )
     private List<InstitutionEntity> institutions = new ArrayList<>();
-
-
 }

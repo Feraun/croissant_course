@@ -18,7 +18,6 @@ import java.util.List;
 @AllArgsConstructor
 public class AdminCategoryService {
 
-
     private final CategoryInstitutionMapper categoryInstitutionMapper;
     private final CategoryInstitutionRepository categoryInstitutionRepository;
 
@@ -53,8 +52,8 @@ public class AdminCategoryService {
         return (id);
     }
 
-    public Page<CategoryInstitutionDTO> searchCategoryOfInstitution(Long categoryId, String categoryName, Pageable pageable){
-        return categoryInstitutionRepository.searchCategories(categoryId, categoryName, pageable)
+    public Page<CategoryInstitutionDTO> searchCategoryOfInstitution(Long categoryId, String name, Pageable pageable){
+        return categoryInstitutionRepository.searchCategories(categoryId, name, pageable)
                 .map(categoryInstitutionMapper::createDtoFromEntity);
     }
 

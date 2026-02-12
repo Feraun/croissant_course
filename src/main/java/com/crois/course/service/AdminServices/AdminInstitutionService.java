@@ -6,11 +6,9 @@ import com.crois.course.entity.*;
 import com.crois.course.enums.Role;
 import com.crois.course.exceptions.NotFoundException;
 import com.crois.course.mapper.InstitutionMapper;
-import com.crois.course.repositories.CategoryInstitutionRepository;
-import com.crois.course.repositories.CityRepository;
-import com.crois.course.repositories.InstitutionRepository;
-import com.crois.course.repositories.UserRepository;
+import com.crois.course.repositories.*;
 import com.crois.course.service.MinioService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,14 +26,13 @@ public class AdminInstitutionService {
     private final InstitutionMapper institutionMapper;
     private final InstitutionRepository institutionRepository;
 
-    private final CityRepository cityRepository;
-
     private final UserRepository userRepository;
 
     private final CategoryInstitutionRepository categoryInstitutionRepository;
 
     private final MinioService minioService;
 
+    private final ImageRepository imageRepository;
     public Page<InstitutionResponseDTO> searchInstitution(String name,
                                                          String address,
                                                          String city,
@@ -47,19 +44,23 @@ public class AdminInstitutionService {
                 .map(institutionMapper::createDtoFromEntity);
     }
 
-    public InstitutionResponseDTO createInstitution(InstitutionRequestDTO institutionRequestDTO, MultipartFile multipartFile) throws Exception {
+    @Transactional
+    public InstitutionResponseDTO createInstitution(
+            InstitutionRequestDTO institutionRequestDTO,
+            MultipartFile multipartFile) throws Exception
+    {
 
         List<CategoryInstitutionEntity> categoryInstitutionEntityList = institutionRequestDTO.categoryIds().stream()
                 .map(categoryInstitutionRepository::getReferenceById)
                 .toList();
 
-        UserEntity manager = userRepository.getReferenceById(institutionRequestDTO.managerId());
+        UserEntity manager = userRepository.findById(institutionRequestDTO.managerId())
+                .orElseThrow(
+                () -> new NotFoundException("User with id " + institutionRequestDTO.managerId() + " not found"));
 
         if(manager.getRole().equals(Role.CLIENT)) {
             manager.setRole(Role.MANAGER);
         }
-
-        CityEntity cityEntity = cityRepository.getReferenceById(institutionRequestDTO.cityId());
 
         ImageEntity imageEntity = ImageEntity.builder()
                 .id(UUID.randomUUID())
@@ -67,29 +68,30 @@ public class AdminInstitutionService {
                 .httpContentType(multipartFile.getContentType())
                 .build();
 
+        imageRepository.save(imageEntity);
+
         InstitutionEntity institutionEntity = institutionMapper.createEntityFromDTO(institutionRequestDTO,
                 categoryInstitutionEntityList,
-                manager,
+                institutionRequestDTO.managerId(),
                 LocalDateTime.now(),
-                imageEntity,
-                cityEntity
+                imageEntity.getId(),
+                institutionRequestDTO.cityId()
         );
 
         institutionRepository.save(institutionEntity);
-
         minioService.save(multipartFile, imageEntity.getId());
 
         return institutionMapper.createDtoFromEntity(institutionEntity);
     }
 
-    //todo надо оптимизировать
+    @Transactional
     public InstitutionResponseDTO editInstitution(Long id, InstitutionRequestDTO institutionRequestDTO){
         InstitutionEntity institutionEntity = institutionRepository.findById(id).orElseThrow();
 
         UserEntity managerOld = institutionEntity.getManager();
         UserEntity managerNew = userRepository.getReferenceById(institutionRequestDTO.managerId());
 
-        if(!managerOld.getId().equals(institutionRequestDTO.managerId())){
+        if(!managerOld.getId().equals(institutionRequestDTO.managerId()) && !managerOld.getRole().equals(Role.ADMIN)){
             managerOld.setRole(Role.CLIENT);
 
             if(managerNew.getRole().equals(Role.CLIENT)){
@@ -101,15 +103,11 @@ public class AdminInstitutionService {
                 .map(categoryInstitutionRepository::getReferenceById)
                 .toList();
 
-        CityEntity cityEntity = cityRepository.getReferenceById(institutionRequestDTO.cityId());
-
-        UserEntity manager = userRepository.getReferenceById(institutionRequestDTO.managerId());
-
         InstitutionEntity institutionEntityUpdated = institutionMapper.updateEntity(institutionEntity,
                 institutionRequestDTO,
                 categoryInstitutionEntityList,
-                manager,
-                cityEntity);
+                managerNew.getId(),
+                institutionRequestDTO.cityId());
 
         institutionRepository.save(institutionEntityUpdated);
 
@@ -117,7 +115,10 @@ public class AdminInstitutionService {
     }
 
     public InstitutionResponseDTO getInstitutionById(Long id){
-        return(institutionMapper.createDtoFromEntity(institutionRepository.findById(id).orElseThrow(()->new NotFoundException("Institution not found"))));
+        return(institutionMapper.createDtoFromEntity(
+                institutionRepository.findById(id)
+                        .orElseThrow(()->new NotFoundException("Institution not found")))
+        );
     }
 
     public Long deleteInstitutionById(Long id){

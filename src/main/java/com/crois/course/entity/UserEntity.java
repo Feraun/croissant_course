@@ -45,14 +45,19 @@ public class UserEntity {
 
     @OneToMany(
             mappedBy = "user",
-            orphanRemoval = true,
             fetch = FetchType.LAZY
     )
     private  List<OrderEntity> orders = new ArrayList<>();
 
-    @OneToMany(
-            mappedBy = "manager",
-            fetch = FetchType.LAZY
+    @ManyToOne(
+            fetch = FetchType.LAZY,
+            optional = false
     )
-    private List<InstitutionEntity> institutionUnderUser;
+    @JoinColumn(name = "institution_id", insertable = false, updatable = false)
+    private InstitutionEntity institutionUnderUser;
+
+    @Column(name = "institution_id")
+    private Long institutionId;
+
+
 }

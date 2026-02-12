@@ -70,9 +70,9 @@ public class AdminInstitutionAndBoxController {
         return adminBoxService.getBoxById(institutionId, boxId);
     }
 
-    @DeleteMapping(value = "/{institutionId}/boxes/{boxId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Long deleteBoxById(@PathVariable("institutionId") Long institutionId, @PathVariable("boxId") Long boxId){
-        return adminBoxService.deleteBoxById(institutionId, boxId);
+    @DeleteMapping(value = "/boxes/{boxId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Long deleteBoxById(@PathVariable("boxId") Long boxId){
+        return adminBoxService.deleteBoxById(boxId);
     }
 
 }
