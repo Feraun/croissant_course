@@ -35,7 +35,7 @@ public class UserEntity {
     private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "roles", nullable = false)
+    @Column(name = "role", nullable = false)
     private Role role;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

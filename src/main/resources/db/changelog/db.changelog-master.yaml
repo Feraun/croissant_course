@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changeset/create-tables.sql
+  - include:
+      file: db/changelog/changeset/initialize-admin-user.sql

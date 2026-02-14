@@ -51,6 +51,8 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
 
     implementation("io.minio:minio:8.6.0")
+
+    implementation 'org.liquibase:liquibase-core'
 }
 
 tasks.named('test') {
