@@ -21,7 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
+//todo при входе два одинаковых запроса - надо разобраться
 @Slf4j
 @Service
 public class AuthService {

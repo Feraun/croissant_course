@@ -33,13 +33,18 @@ public class AdminCityService {
 
     @Transactional
     public CityDTO editCity(Long id, CityDTO cityDTO){
-        //todo
+        if (!cityRepository.existsById(id)){
+            throw new NotFoundException("City with id " + id + " not found");
+        }
         cityMapper.updateEntity(cityRepository.getReferenceById(id), cityDTO);
         return cityDTO;
 
     }
 
     public CityDTO getCityById(Long id){
+        if (!cityRepository.existsById(id)){
+            throw new NotFoundException("City with id " + id + " not found");
+        }
         return cityMapper.createDtoFromEntity(
                 cityRepository.findById(id).orElseThrow(()->new NotFoundException("City not found"))
         );
