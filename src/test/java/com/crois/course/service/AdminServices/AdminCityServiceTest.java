@@ -64,7 +64,7 @@ class AdminCityServiceTest {
     void editCity_NotExist_Failed() {
         Long id = 1L;
 
-        when(cityRepository.existsById(id)).thenReturn(false);
+        when(cityRepository.findById(id)).thenReturn(Optional.empty());
 
         NotFoundException exception = assertThrows(
                 NotFoundException.class,
@@ -84,15 +84,15 @@ class AdminCityServiceTest {
         CityEntity city = new CityEntity();
         city.setId(id);
 
-        when(cityRepository.existsById(id)).thenReturn(true);
-        when(cityRepository.getReferenceById(id)).thenReturn(city);
+        when(cityRepository.findById(id)).thenReturn(Optional.of(city));
+        when(cityRepository.save(city)).thenReturn(city);
 
         CityDTO result = adminCityService.editCity(id, testCityDTO);
 
         assertEquals(testCityDTO, result);
 
-        verify(cityRepository).existsById(id);
-        verify(cityRepository).getReferenceById(id);
+        verify(cityRepository).findById(id);
+        verify(cityRepository).save(city);
         verify(cityMapper).updateEntity(city, testCityDTO);
     }
 
