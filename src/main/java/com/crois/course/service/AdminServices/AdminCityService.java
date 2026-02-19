@@ -22,9 +22,6 @@ public class AdminCityService {
     private final CityMapper cityMapper;
     private final CityRepository cityRepository;
 
-    @PersistenceContext
-    private EntityManager em;
-
     public CityDTO createCity(CityDTO cityDTO){
         CityEntity cityEntity = cityMapper.createEntityFromDTO(cityDTO);
         cityRepository.save(cityEntity);
@@ -33,26 +30,28 @@ public class AdminCityService {
 
     @Transactional
     public CityDTO editCity(Long id, CityDTO cityDTO){
-        if (!cityRepository.existsById(id)){
-            throw new NotFoundException("City with id " + id + " not found");
-        }
-        cityMapper.updateEntity(cityRepository.getReferenceById(id), cityDTO);
+
+        CityEntity city = cityRepository.findById(id) // Один запрос вместо двух
+                .orElseThrow(() -> new NotFoundException("City with id " + id + " not found"));
+
+        cityMapper.updateEntity(city, cityDTO);
+        cityRepository.save(city);
         return cityDTO;
 
     }
 
     public CityDTO getCityById(Long id){
-        if (!cityRepository.existsById(id)){
-            throw new NotFoundException("City with id " + id + " not found");
-        }
         return cityMapper.createDtoFromEntity(
-                cityRepository.findById(id).orElseThrow(()->new NotFoundException("City not found"))
+                cityRepository.findById(id).orElseThrow(
+                        ()->new NotFoundException("City with id " + id + " not found"))
         );
     }
 
     public Long deleteCityById(Long id){
-        cityRepository.deleteById(id);
-        return (id);
+        if (cityRepository.existsById(id)) {
+            cityRepository.deleteById(id);
+        }
+        throw new NotFoundException("City with id " + id + "not found");
     }
 
     public Page<CityDTO> searchCity(String cityName, Long cityId, Pageable pageable){
