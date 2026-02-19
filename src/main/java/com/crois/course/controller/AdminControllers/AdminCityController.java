@@ -22,7 +22,7 @@ public class AdminCityController {
     private final AdminCityService adminCityService;
 
     @GetMapping()
-    public Page<CityDTO> searchCategoriesInstitution(
+    public Page<CityDTO> searchCities(
             //todo cityname, cityid
             @RequestParam(required = false) String cityName,
             @RequestParam(required = false) Long cityId,
