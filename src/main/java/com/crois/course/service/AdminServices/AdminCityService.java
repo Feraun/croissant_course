@@ -50,8 +50,9 @@ public class AdminCityService {
     public Long deleteCityById(Long id){
         if (cityRepository.existsById(id)) {
             cityRepository.deleteById(id);
+            return id;
         }
-        throw new NotFoundException("City with id " + id + "not found");
+        throw new NotFoundException("City with id " + id + " not found");
     }
 
     public Page<CityDTO> searchCity(String cityName, Long cityId, Pageable pageable){
