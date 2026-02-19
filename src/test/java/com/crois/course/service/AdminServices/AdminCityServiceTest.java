@@ -42,7 +42,22 @@ class AdminCityServiceTest {
     }
 
     @Test
-    void createCity() {
+    void createCity_Success() {
+
+        CityEntity newCity = new CityEntity();
+
+        when(cityMapper.createEntityFromDTO(testCityDTO)).thenReturn(newCity);
+        when(cityRepository.save(newCity)).thenReturn(newCity);
+        when(cityMapper.createDtoFromEntity(newCity)).thenReturn(testCityDTO);
+
+        CityDTO result = adminCityService.createCity(testCityDTO);
+
+        assertNotNull(result);
+        assertEquals(testCityDTO, result);
+
+        verify(cityMapper).createEntityFromDTO(testCityDTO);
+        verify(cityRepository).save(newCity);
+        verify(cityMapper).createDtoFromEntity(newCity);
     }
 
     @Test
