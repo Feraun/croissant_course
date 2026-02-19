@@ -8,7 +8,6 @@ import com.crois.course.mapper.UserMapper;
 import com.crois.course.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
 

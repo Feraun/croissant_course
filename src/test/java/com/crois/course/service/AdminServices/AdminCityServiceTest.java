@@ -43,7 +43,6 @@ class AdminCityServiceTest {
 
     @Test
     void createCity_Success() {
-
         CityEntity newCity = new CityEntity();
 
         when(cityMapper.createEntityFromDTO(testCityDTO)).thenReturn(newCity);
