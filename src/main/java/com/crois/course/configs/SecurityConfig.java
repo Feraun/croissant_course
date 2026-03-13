@@ -35,6 +35,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(request -> request
+
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/login").permitAll()
                         .requestMatchers("/api/registration").permitAll()
                         .requestMatchers("api/images/**").permitAll()
@@ -47,6 +49,7 @@ public class SecurityConfig {
 
                         .requestMatchers("/api/manager/**")
                         .hasAnyRole("ADMIN", "MANAGER")
+
 
 
                         .anyRequest().authenticated())
