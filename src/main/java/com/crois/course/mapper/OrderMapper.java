@@ -1,5 +1,6 @@
 package com.crois.course.mapper;
 
+import com.crois.course.dto.OrderClientDTO;
 import com.crois.course.dto.OrderDTO;
 import com.crois.course.entity.BoxEntity;
 import com.crois.course.entity.OrderEntity;
@@ -16,6 +17,9 @@ public interface OrderMapper {
     @Mapping(target = "user", source = "user")
     @Mapping(target = "box", source = "box")
     OrderDTO createDtoFromEntity(OrderEntity orderEntity);
+
+    @Mapping(target = "box", source = "box")
+    OrderClientDTO createClientDTOFromEntity(OrderEntity orderEntity);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", source = "userEntity")

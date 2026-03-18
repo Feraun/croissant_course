@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ClientProfileController {
 
     private final ClientProfileService clientProfileService;
+
     @GetMapping()
     public UserProfileDTO getDataForProfilePage(Authentication authentication){
         return clientProfileService.getDataForProfilePage(authentication);

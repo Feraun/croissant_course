@@ -1,6 +1,7 @@
 package com.crois.course.service.ClientServices;
 
 import com.crois.course.dto.BoxDTO.BoxResponseDTO;
+import com.crois.course.dto.OrderClientDTO;
 import com.crois.course.dto.OrderDTO;
 import com.crois.course.dto.UserDTO.AuthUser;
 import com.crois.course.entity.BoxEntity;
@@ -14,6 +15,8 @@ import com.crois.course.repositories.OrderRepository;
 import com.crois.course.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,6 +58,15 @@ public class ClientBoxService {
         orderRepository.save(orderEntity);
 
         return orderMapper.createDtoFromEntity(orderEntity);
+    }
+
+    public Page<OrderClientDTO> getMyBoxes(Authentication authentication, Pageable pageable){
+
+        AuthUser authUser = (AuthUser) authentication.getPrincipal();
+
+        return orderRepository.getMyOrders(authUser.getId(), pageable)
+                .map(orderMapper::createClientDTOFromEntity);
+
     }
 
 }

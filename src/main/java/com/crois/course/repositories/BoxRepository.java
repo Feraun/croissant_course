@@ -5,6 +5,7 @@ import com.crois.course.exceptions.NotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.geo.Box;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -43,4 +44,6 @@ public interface BoxRepository extends JpaRepository<BoxEntity, Long> {
                                                    @Param("managerId") Long managerId,
                                                    @Param("boxId") Long boxId,
                                                    Pageable pageable);
+
+
 }

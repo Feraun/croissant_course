@@ -1,5 +1,6 @@
 package com.crois.course.repositories;
 
+import com.crois.course.entity.BoxEntity;
 import com.crois.course.entity.OrderEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,4 +35,13 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
             @Param("managerId") Long managerId,
             Pageable pageable
     );
+
+    @Query("""
+            SELECT oe FROM OrderEntity oe
+            JOIN oe.user u
+            JOIN FETCH oe.box b
+            WHERE u.id = :userId
+            """)
+    Page<OrderEntity> getMyOrders(@Param("userId") Long userId,
+                                    Pageable pageable);
 }
