@@ -35,6 +35,7 @@ public interface InstitutionMapper {
     @Mapping(target = "contactNumber", source = "institution.contactNumber")
     @Mapping(target = "categories", source = "institution.categories")
     @Mapping(target = "boxes", source = "boxEntities")
+    @Mapping(target = "logoId", source = "institution.logoId")
     InstitutionResponseClient createDtoForClientById(InstitutionEntity institution, List<BoxEntity> boxEntities);
 
     @Mapping(target = "cityName", source = "city.name")
@@ -55,7 +56,6 @@ public interface InstitutionMapper {
                                    Long managerId,
                                    Long cityId
     );
-
 
     InstitutionResponseManagerForGetAll createManagerDtoFromEntity(InstitutionEntity institution);
 }
