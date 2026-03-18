@@ -4,6 +4,7 @@ import com.crois.course.dto.BoxDTO.BoxResponseDTO;
 import com.crois.course.dto.CategoryInstitutionDTO.CategoryInstitutionDTO;
 
 import java.util.List;
+import java.util.UUID;
 
 public record InstitutionResponseClient(
         Long id,
@@ -12,5 +13,6 @@ public record InstitutionResponseClient(
         Double rating,
         String contactNumber,
         List<CategoryInstitutionDTO> categories,
-        List<BoxResponseDTO> boxes
+        List<BoxResponseDTO> boxes,
+        UUID logoId
 ) {}

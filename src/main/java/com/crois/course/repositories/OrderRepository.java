@@ -22,16 +22,13 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
 
 
     @Query("""
-            SELECT oe FROM OrderEntity oe
-            JOIN FETCH oe.box b
-            JOIN FETCH oe.user u
-            JOIN b.institution i
-            WHERE EXISTS (
-                SELECT 1 FROM i.managerId
-                WHERE i.managerId = :managerId
-            )
-            AND (oe.id = coalesce(:id, oe.id))
-            """)
+        SELECT oe FROM OrderEntity oe
+        JOIN FETCH oe.box b
+        JOIN FETCH oe.user u
+        JOIN b.institution i
+        WHERE i.managerId = :managerId
+        AND (:orderId IS NULL OR oe.id = :orderId)
+        """)
     Page<OrderEntity> searchOrderByManager(
             @Param("orderId") Long orderId,
             @Param("managerId") Long managerId,

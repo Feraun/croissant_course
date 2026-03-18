@@ -44,8 +44,6 @@ public class ClientInstitutionService {
 
         InstitutionEntity institutionEntity = institutionRepository.getInstitutionsFetchCategories(id);
 
-
-
         return institutionMapper.createDtoForClientById(institutionEntity, boxEntityList);
     }
 
