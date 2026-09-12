@@ -1,6 +1,14 @@
 package com.crois.course.dto.UserDTO.Login;
 
-public record UserLoginRequestDTO(
-        String username,
-        String password
-) { }
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
+
+@Data
+public class UserLoginRequestDTO {
+
+    @NotBlank
+    private String username;
+
+    @NotBlank
+    private String password;
+}

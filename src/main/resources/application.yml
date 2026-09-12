@@ -1,18 +1,35 @@
 spring:
   application:
     name: course
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8081/realms/Oauth
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8081/realms/Oauth
+            user-name-attribute: preferred_username
+        registration:
+          keycloak:
+            client-id: myclient
+            client-secret: BhG27c2607KowZP2QpzEv8q8bgil19eI
+            scope: openid
+
+  data:
+    rest:
+      base-path: /rest-api  # Или любой другой префикс для Data REST
 
   datasource:
-    url: jdbc:postgresql://postgres:5432/course_db
+    url: jdbc:postgresql://localhost:5432/course_db
     username: postgres
     password: 1237890zx
 
   jpa:
     hibernate:
       ddl-auto: none
-
     show-sql: true
-
     properties:
       hibernate:
         format_sql: true
@@ -20,11 +37,13 @@ spring:
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
 
+server:
+  port: 8080
 
 minio:
-  url: http://minio:9000
-  username: admin
-  password: admin123
+  url: http://localhost:9000
+  username: minio
+  password: minio123
 
 
 logging:

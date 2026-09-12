@@ -1,21 +1,20 @@
 package com.crois.course.entity;
 
 import com.crois.course.enums.Role;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@NoArgsConstructor
 public class UserEntity {
 
     @Id
@@ -24,6 +23,9 @@ public class UserEntity {
 
     @Column(name="username", unique = true)
     private String username;
+
+    @Column(name="keycloak_id", unique = true)
+    private UUID keycloakId;
 
     private boolean enabled;
 
@@ -37,11 +39,6 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private Role role;
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "password_id", nullable = false)
-    @JsonIgnore
-    private PasswordEntity password;
 
     @OneToMany(
             mappedBy = "user",
@@ -58,6 +55,4 @@ public class UserEntity {
 
     @Column(name = "institution_id")
     private Long institutionId;
-
-
 }

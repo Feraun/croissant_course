@@ -7,10 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
-    @Query("SELECT u " +
-            " FROM UserEntity u " +
-            " JOIN FETCH u.password " +
-            " WHERE u.username = :name")
+    @Query("""
+        SELECT u 
+        FROM UserEntity u 
+        WHERE u.username = :name
+    """)
     UserEntity findByUsername(String name);
 
 }

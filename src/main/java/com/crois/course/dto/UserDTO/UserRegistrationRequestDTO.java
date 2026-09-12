@@ -1,12 +1,19 @@
 package com.crois.course.dto.UserDTO;
 
-import java.util.List;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 
-public record UserRegistrationRequestDTO (
-        String email,
-        String password,
-        String username,
-        String contactNumber,
-        String firstName,
-        String lastName
-) { }
+@Data
+public class UserRegistrationRequestDTO {
+    @NotBlank
+    private String username;
+    @NotBlank
+    private String password;
+    @Email
+    private String email;
+
+    private String firstName;
+
+    private String lastName;
+}
