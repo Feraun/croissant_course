@@ -1,7 +1,6 @@
 package com.crois.course.service.ManagerServices;
 
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseManagerForGetAll;
-import com.crois.course.dto.UserDTO.AuthUser;
 import com.crois.course.mapper.InstitutionMapper;
 import com.crois.course.repositories.InstitutionRepository;
 import lombok.AllArgsConstructor;
@@ -9,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+
+import static com.crois.course.Utils.IdUtils.getIdFromAuthentication;
 
 @Service
 @AllArgsConstructor
@@ -21,9 +22,7 @@ public class ManagerInstitutionService {
                                                                        Pageable pageable,
                                                                        Authentication authentication) {
 
-        AuthUser authUser = (AuthUser) authentication.getPrincipal();
-
-        return institutionRepository.searchInstitutionByManager(authUser.getId(), pageable)
+        return institutionRepository.searchInstitutionByManager(getIdFromAuthentication(authentication), pageable)
                 .map(institutionMapper::createManagerDtoFromEntity);
     }
 

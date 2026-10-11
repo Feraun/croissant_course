@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
@@ -18,7 +17,7 @@ public class MinioService {
 
     private final MinioClient minioClient;
 
-    private Long putObjectPartSize = 5242880L;
+    private final Long putObjectPartSize = 5242880L;
 
     public void save(MultipartFile file, UUID uuid) throws Exception {
         minioClient.putObject(

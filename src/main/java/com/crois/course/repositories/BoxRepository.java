@@ -1,19 +1,17 @@
 package com.crois.course.repositories;
 
 import com.crois.course.entity.BoxEntity;
-import com.crois.course.exceptions.NotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.geo.Box;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import javax.swing.*;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface BoxRepository extends JpaRepository<BoxEntity, Long> {
 
@@ -35,15 +33,15 @@ public interface BoxRepository extends JpaRepository<BoxEntity, Long> {
     List<BoxEntity> getBoxesFromInstitutions(@Param("institutionId") Long institutionId);
 
     @Query("""
-            SELECT be FROM BoxEntity be
-            JOIN FETCH be.institution i
-            WHERE i.id = :institutionId and i.managerId = :managerId
-            AND be.id = coalesce(:boxId, be.id)
-            """)
+        SELECT be FROM BoxEntity be
+        JOIN FETCH be.institution i
+        JOIN i.managers m
+        WHERE i.id = :institutionId AND m.id = :managerId
+        AND be.id = coalesce(:boxId, be.id)
+        """)
     Page<BoxEntity> getBoxFromInstitutionByManager(@Param("institutionId") Long institutionId,
-                                                   @Param("managerId") Long managerId,
+                                                   @Param("managerId") UUID managerId,
                                                    @Param("boxId") Long boxId,
                                                    Pageable pageable);
-
 
 }

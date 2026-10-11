@@ -3,7 +3,6 @@ package com.crois.course.service.ClientServices;
 import com.crois.course.dto.BoxDTO.BoxResponseDTO;
 import com.crois.course.dto.OrderClientDTO;
 import com.crois.course.dto.OrderDTO;
-import com.crois.course.dto.UserDTO.AuthUser;
 import com.crois.course.entity.BoxEntity;
 import com.crois.course.entity.OrderEntity;
 import com.crois.course.entity.UserEntity;
@@ -23,6 +22,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
 
+import static com.crois.course.Utils.IdUtils.getIdFromAuthentication;
+
 @Service
 @AllArgsConstructor
 public class ClientBoxService {
@@ -37,21 +38,23 @@ public class ClientBoxService {
 
     public BoxResponseDTO getBoxById(@PathVariable("institutionId") Long institutionId, @PathVariable("boxId") Long boxId){
         return boxRepository.findByIdAndInstitutionId(boxId, institutionId)
-                .map(boxMapper::createShortDtoFromEntity)
-                .orElseThrow(()->new NotFoundException("Box not found"));
-
+            .map(boxMapper::createShortDtoFromEntity)
+            .orElseThrow(()->new NotFoundException("Box not found"));
     }
 
     @Transactional
-    public OrderDTO buyBox(@PathVariable("boxId") Long boxId, Authentication authentication){
+    public OrderDTO buyBox(Long boxId, Authentication authentication){
 
-        BoxEntity boxEntity = boxRepository.findById(boxId).orElseThrow(()->new NotFoundException("Box not found"));
+        BoxEntity boxEntity = boxRepository.findById(boxId)
+                .orElseThrow(() -> new NotFoundException("Box not found"));
 
-        boxEntity.setQuantity(boxEntity.getQuantity() - 1);
+        if (boxEntity.getQuantity() > 0){
+            boxEntity.setQuantity(boxEntity.getQuantity() - 1);
+        } else {
+            throw new NotFoundException("This box sold out");
+        }
 
-        AuthUser authUser = (AuthUser) authentication.getPrincipal();
-
-        UserEntity user = userRepository.getReferenceById(authUser.getId());
+        UserEntity user = userRepository.getReferenceById(getIdFromAuthentication(authentication));
 
         OrderEntity orderEntity = orderMapper.createEntity(user, boxEntity, LocalDateTime.now());
 
@@ -61,12 +64,8 @@ public class ClientBoxService {
     }
 
     public Page<OrderClientDTO> getMyBoxes(Authentication authentication, Pageable pageable){
-
-        AuthUser authUser = (AuthUser) authentication.getPrincipal();
-
-        return orderRepository.getMyOrders(authUser.getId(), pageable)
+        return orderRepository.getMyOrders(getIdFromAuthentication(authentication), pageable)
                 .map(orderMapper::createClientDTOFromEntity);
-
     }
 
 }

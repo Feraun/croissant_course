@@ -3,7 +3,6 @@ package com.crois.course.controller.ClientControllers;
 import com.crois.course.dto.BoxDTO.BoxResponseDTO;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseClient;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseClientGetAll;
-import com.crois.course.dto.InstitutionDTO.InstitutionResponseDTO;
 import com.crois.course.service.ClientServices.ClientBoxService;
 import com.crois.course.service.ClientServices.ClientInstitutionService;
 import lombok.AllArgsConstructor;

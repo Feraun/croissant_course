@@ -36,7 +36,6 @@ public class ManagerInstitutionController {
             @PageableDefault Pageable pageable,
             Authentication authentication
     ) {
-
         return managerBoxService.getAllBox(institutionId, boxId, authentication, pageable);
     }
 

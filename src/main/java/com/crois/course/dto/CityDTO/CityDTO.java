@@ -4,5 +4,4 @@ public record CityDTO(
         Long id,
         String name,
         String region
-) {
-}
+) { }

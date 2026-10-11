@@ -4,7 +4,8 @@ import com.crois.course.dto.OrderDTO;
 import com.crois.course.mapper.OrderMapper;
 import com.crois.course.repositories.OrderRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service

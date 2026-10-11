@@ -5,8 +5,6 @@ import com.crois.course.entity.CityEntity;
 import com.crois.course.exceptions.NotFoundException;
 import com.crois.course.mapper.CityMapper;
 import com.crois.course.repositories.CityRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;

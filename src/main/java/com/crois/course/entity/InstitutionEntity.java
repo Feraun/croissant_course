@@ -1,7 +1,10 @@
 package com.crois.course.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -32,12 +35,8 @@ public class InstitutionEntity {
     )
     private List<CategoryInstitutionEntity> categories = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
-    private UserEntity manager;
-
-    @Column(name = "user_id", nullable = false)
-    private Long managerId;
+    @OneToMany(mappedBy = "institutionUnderUser", fetch = FetchType.LAZY)
+    private List<UserEntity> managers = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "city_id", insertable = false, updatable = false)

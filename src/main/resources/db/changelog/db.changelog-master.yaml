@@ -5,3 +5,8 @@ databaseChangeLog:
       file: db/changelog/changeset/initialize-admin-user.sql
   - include:
       file: db/changelog/changeset/change-architecture-for-keycloak.sql
+  - include:
+      file: db/changelog/changeset/one-institution-to-many-managers.sql
+  - include:
+      file: db/changelog/changeset/change-user-pk-to-UUID.sql
+

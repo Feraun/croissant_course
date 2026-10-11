@@ -2,7 +2,10 @@ package com.crois.course.entity;
 
 import com.crois.course.enums.Role;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,14 +21,10 @@ import java.util.UUID;
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     @Column(name="username", unique = true)
     private String username;
-
-    @Column(name="keycloak_id", unique = true)
-    private UUID keycloakId;
 
     private boolean enabled;
 
@@ -46,10 +45,17 @@ public class UserEntity {
     )
     private  List<OrderEntity> orders = new ArrayList<>();
 
-    @ManyToOne(
-            fetch = FetchType.LAZY,
-            optional = false
-    )
+//    @ManyToOne(
+//            fetch = FetchType.LAZY,
+//            optional = false
+//    )
+//    @JoinColumn(name = "institution_id", insertable = false, updatable = false)
+//    private InstitutionEntity institutionUnderUser;
+//
+//    @Column(name = "institution_id")
+//    private Long institutionId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "institution_id", insertable = false, updatable = false)
     private InstitutionEntity institutionUnderUser;
 

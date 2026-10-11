@@ -2,10 +2,8 @@ package com.crois.course.dto.UserDTO;
 
 import com.crois.course.enums.Role;
 
-import java.util.List;
-
 public record UserFullDTO(
-        Long id,
+        String id,
         String name,
         String firstName,
         String lastName,

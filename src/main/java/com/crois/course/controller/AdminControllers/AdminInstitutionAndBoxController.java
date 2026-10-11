@@ -35,12 +35,13 @@ public class AdminInstitutionAndBoxController {
     }
 
     @PostMapping(value = "/createInstitution", produces = MediaType.APPLICATION_JSON_VALUE)
-    public InstitutionResponseDTO createInstitution(@ModelAttribute InstitutionRequestDTO InstitutionRequestDTO, @RequestParam("file") MultipartFile file) throws Exception {
-        return (adminInstitutionService.createInstitution(InstitutionRequestDTO, file));
+    public InstitutionResponseDTO createInstitution(@ModelAttribute InstitutionRequestDTO institutionRequestDTO, @RequestParam("file") MultipartFile file) throws Exception {
+        return (adminInstitutionService.createInstitution(institutionRequestDTO, file));
     }
 
+    //todo сделать обновление картинки
     @PatchMapping(value = "/editInstitution/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public InstitutionResponseDTO editInstitution(@PathVariable("id") Long id, @RequestBody InstitutionRequestDTO institutionRequestDTO){
+    public InstitutionResponseDTO editInstitution(@PathVariable("id") Long id, @ModelAttribute InstitutionRequestDTO institutionRequestDTO){
         return (adminInstitutionService.editInstitution(id, institutionRequestDTO));
     }
 
@@ -60,9 +61,10 @@ public class AdminInstitutionAndBoxController {
         return adminBoxService.createBox(institutionId, createBoxDTO);
     }
 
+    //todo структуру эндпоинтов надо менять
     @PatchMapping(value = "/{institutionId}/editBox/{boxId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public CreateBoxDTO editBox(@PathVariable("institutionId") Long institutionId, @PathVariable("boxId") Long boxId, @RequestBody CreateBoxDTO createBoxDTO){
-        return adminBoxService.editBox(institutionId, boxId, createBoxDTO);
+    public CreateBoxDTO editBox(@PathVariable("boxId") Long boxId, @RequestBody CreateBoxDTO createBoxDTO){
+        return adminBoxService.editBox(boxId, createBoxDTO);
     }
 
     @GetMapping(value = "/{institutionId}/boxes/{boxId}", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -10,5 +10,5 @@ public record InstitutionRequestDTO(
         Double rating,
         String contactNumber,
         List<Long> categoryIds,
-        Long managerId
+        List<String> managerId
 ) { }
