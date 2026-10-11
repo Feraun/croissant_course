@@ -1,8 +1,6 @@
 package com.crois.course.controller.ManagerControllers;
 
 import com.crois.course.dto.OrderDTO;
-import com.crois.course.dto.PageParams;
-import com.crois.course.dto.PageResult;
 import com.crois.course.service.ManagerServices.ManagerOrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;

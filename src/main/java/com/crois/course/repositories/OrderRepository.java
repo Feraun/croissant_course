@@ -1,12 +1,13 @@
 package com.crois.course.repositories;
 
-import com.crois.course.entity.BoxEntity;
 import com.crois.course.entity.OrderEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.util.UUID;
 
 
 public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
@@ -27,12 +28,13 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
         JOIN FETCH oe.box b
         JOIN FETCH oe.user u
         JOIN b.institution i
-        WHERE i.managerId = :managerId
+        JOIN i.managers m
+        WHERE m.id = :managerId
         AND (:orderId IS NULL OR oe.id = :orderId)
         """)
     Page<OrderEntity> searchOrderByManager(
             @Param("orderId") Long orderId,
-            @Param("managerId") Long managerId,
+            @Param("managerId") UUID managerId,
             Pageable pageable
     );
 
@@ -42,6 +44,6 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
             JOIN FETCH oe.box b
             WHERE u.id = :userId
             """)
-    Page<OrderEntity> getMyOrders(@Param("userId") Long userId,
+    Page<OrderEntity> getMyOrders(@Param("userId") UUID userId,
                                     Pageable pageable);
 }

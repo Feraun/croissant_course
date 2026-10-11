@@ -2,10 +2,8 @@ package com.crois.course.service.ClientServices;
 
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseClient;
 import com.crois.course.dto.InstitutionDTO.InstitutionResponseClientGetAll;
-import com.crois.course.dto.InstitutionDTO.InstitutionResponseDTO;
 import com.crois.course.entity.BoxEntity;
 import com.crois.course.entity.InstitutionEntity;
-import com.crois.course.exceptions.NotFoundException;
 import com.crois.course.mapper.InstitutionMapper;
 import com.crois.course.repositories.BoxRepository;
 import com.crois.course.repositories.InstitutionRepository;

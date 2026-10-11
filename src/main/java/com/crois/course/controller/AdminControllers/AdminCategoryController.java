@@ -2,14 +2,11 @@ package com.crois.course.controller.AdminControllers;
 
 
 import com.crois.course.dto.CategoryInstitutionDTO.CategoryInstitutionDTO;
-import com.crois.course.dto.PageParams;
-import com.crois.course.dto.PageResult;
 import com.crois.course.service.AdminServices.AdminCategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -4,12 +4,18 @@ import com.crois.course.dto.UserDTO.Login.UserLoginRequestDTO;
 import com.crois.course.dto.UserDTO.Login.UserLoginResponse;
 import com.crois.course.dto.UserDTO.UserRegistrationRequestDTO;
 import com.crois.course.entity.UserEntity;
+import com.crois.course.enums.Role;
 import com.crois.course.mapper.UserMapper;
+import com.crois.course.properties.KeycloakProperties;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
-import org.keycloak.admin.client.KeycloakBuilder;
+import org.keycloak.admin.client.resource.ClientResource;
+import org.keycloak.admin.client.resource.RealmResource;
+import org.keycloak.admin.client.resource.UserResource;
+import org.keycloak.representations.idm.ClientRepresentation;
 import org.keycloak.representations.idm.CredentialRepresentation;
+import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -27,7 +33,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService {
+public class KeycloakService {
 
     private final HelperService helperService;
 
@@ -42,7 +48,14 @@ public class AuthService {
     @Value("${spring.security.oauth2.client.registration.keycloak.client-secret}")
     private String clientSecret;
 
+    @Value("${spring.security.oauth2.client.registration.keycloak.client-id}")
+    private String backendClientId;
+
     private final RestTemplate restTemplate = new RestTemplate();
+
+    private final Keycloak keycloakAdmin;
+
+    private final KeycloakProperties properties;
 
     public UserLoginResponse login(UserLoginRequestDTO request) {
         String tokenUrl = issuerUri + "/protocol/openid-connect/token";
@@ -70,14 +83,6 @@ public class AuthService {
     }
 
     public void register(UserRegistrationRequestDTO request) {
-        // Подключаемся к Keycloak с правами администратора
-        Keycloak keycloakAdmin = KeycloakBuilder.builder()
-                .serverUrl("http://localhost:8081") // Базовый URL Keycloak
-                .realm("master") // Админская реама
-                .username("admin") // Ваша учетка админа Keycloak
-                .password("admin") // Пароль админа
-                .clientId("admin-cli")
-                .build();
 
         CredentialRepresentation credential = new CredentialRepresentation();
         credential.setType(CredentialRepresentation.PASSWORD);
@@ -93,14 +98,14 @@ public class AuthService {
         user.setEmailVerified(true);
         user.setCredentials(Collections.singletonList(credential));
 
-        Response response = keycloakAdmin.realm("Oauth").users().create(user);
-
-        String path = response.getLocation().getPath();
-        String keycloakIdStr = Paths.get(path).getFileName().toString();
+        Response response = keycloakAdmin.realm(properties.getTargetRealm()).users().create(user);
 
         if (response.getStatus() != 201) {
             throw new RuntimeException("Ошибка регистрации в Keycloak. Статус: " + response.getStatus());
         }
+
+        String path = response.getLocation().getPath();
+        String keycloakIdStr = Paths.get(path).getFileName().toString();
 
         UserEntity currentUser = mapper.toUserRegistrationEntity(request, keycloakIdStr);
 
@@ -108,8 +113,43 @@ public class AuthService {
             helperService.saveUser(currentUser);
         }
         catch (Exception e) {
-            keycloakAdmin.realm("Oauth").users().get(keycloakIdStr).remove();
+            keycloakAdmin.realm(properties.getTargetRealm()).users().get(keycloakIdStr).remove();
             throw new RuntimeException("Ошибка сохранения в локальную БД. Пользователь из Keycloak удален.", e);
         }
+    }
+
+    public void promoteClientToManager(String keycloakUserId) {
+
+        RealmResource realmResource = keycloakAdmin.realm(properties.getTargetRealm());
+        UserResource userResource = realmResource.users().get(keycloakUserId);
+
+        // 1. Находим внутренний ID клиента (он отличается от названия tasty_hour_backend)
+        ClientRepresentation clientRep = realmResource.clients().findByClientId(backendClientId).getFirst();
+        String internalClientId = clientRep.getId();
+        ClientResource clientResource = realmResource.clients().get(internalClientId);
+
+        // 2. Получаем представления ролей
+        RoleRepresentation roleClient = clientResource.roles().get(Role.CLIENT.toString()).toRepresentation();
+        RoleRepresentation roleManager = clientResource.roles().get(Role.MANAGER.toString()).toRepresentation();
+
+        // 3. Забираем CLIENT и выдаем MANAGER
+        userResource.roles().clientLevel(internalClientId).remove(Collections.singletonList(roleClient));
+        userResource.roles().clientLevel(internalClientId).add(Collections.singletonList(roleManager));
+    }
+
+    public void demoteManagerToClient(String keycloakUserId) {
+        RealmResource realmResource = keycloakAdmin.realm(properties.getTargetRealm());
+        UserResource userResource = realmResource.users().get(keycloakUserId);
+
+        ClientRepresentation clientRep = realmResource.clients().findByClientId(backendClientId).getFirst();
+        String internalClientId = clientRep.getId();
+        ClientResource clientResource = realmResource.clients().get(internalClientId);
+
+        RoleRepresentation roleClient = clientResource.roles().get(Role.CLIENT.toString()).toRepresentation();
+        RoleRepresentation roleManager = clientResource.roles().get(Role.MANAGER.toString()).toRepresentation();
+
+        // Забираем MANAGER и выдаем CLIENT
+        userResource.roles().clientLevel(internalClientId).remove(Collections.singletonList(roleManager));
+        userResource.roles().clientLevel(internalClientId).add(Collections.singletonList(roleClient));
     }
 }

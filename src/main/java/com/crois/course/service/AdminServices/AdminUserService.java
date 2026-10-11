@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -18,16 +19,21 @@ public class AdminUserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    public List<UserDTOForAddManagerToInstitution> getAllUsers(){
+    public List<UserFullDTO> getAllUsers(){
         return userRepository.findAll()
                 .stream()
-                .map(userMapper::createUserForAddToInstDTO)
+                .map(userMapper::toUserFullDTO)
                 .toList();
     }
 
-    public UserFullDTO getUserById(Long id){
-        UserEntity userEntity = userRepository.findById(id).orElseThrow(()->new NotFoundException("User not found"));
-        return userMapper.toUserFullDTO(userEntity);
+    public List<UserDTOForAddManagerToInstitution> getUsersForManagers() {
+        return userRepository.getUserForManagers().stream()
+                .map(userMapper::createUserForAddManagerToInstitutionDTO)
+                .toList();
     }
 
+    public UserFullDTO getUserById(UUID id){
+        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
+        return userMapper.toUserFullDTO(userEntity);
+    }
 }

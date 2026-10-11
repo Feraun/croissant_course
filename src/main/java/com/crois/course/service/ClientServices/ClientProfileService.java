@@ -1,13 +1,13 @@
 package com.crois.course.service.ClientServices;
 
-import com.crois.course.dto.UserDTO.AuthUser;
 import com.crois.course.dto.UserDTO.UserProfileDTO;
-import com.crois.course.entity.*;
 import com.crois.course.mapper.UserMapper;
-import com.crois.course.repositories.*;
+import com.crois.course.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+
+import static com.crois.course.Utils.IdUtils.getIdFromAuthentication;
 
 @Service
 @AllArgsConstructor
@@ -17,12 +17,9 @@ public class ClientProfileService {
     private final UserMapper userMapper;
 
     public UserProfileDTO getDataForProfilePage(Authentication authentication){
-        AuthUser authUser = (AuthUser)  authentication.getPrincipal();
-
-        UserEntity user = userRepository.getReferenceById(authUser.getId());
-
-        return userMapper.createUserProfileDtoFromEntity(user);
-
+        return userMapper.createUserProfileDtoFromEntity(
+                userRepository.getReferenceById(getIdFromAuthentication(authentication))
+        );
     }
 
     //todo доделать историю заказов

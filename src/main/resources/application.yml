@@ -1,21 +1,33 @@
 spring:
   application:
     name: course
+  keycloak:
+    server-uri: ${KEYCLOAK_SERVER_URI:http://localhost:8081}
+    admin-realm: ${KEYCLOAK_ADMIN_REALM:master}
+    target-realm: ${KEYCLOAK_TARGET_REALM:tastyHour}
+    username: ${KEYCLOAK_USERNAME:admin}
+    password: ${KEYCLOAK_PASSWORD:admin}
+    clientId: ${KEYCLOAK_CLIENT_ID:admin-cli}
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8081/realms/Oauth
+          issuer-uri: http://localhost:8081/realms/tastyHour
       client:
         provider:
           keycloak:
-            issuer-uri: http://localhost:8081/realms/Oauth
+            issuer-uri: http://localhost:8081/realms/tastyHour
             user-name-attribute: preferred_username
         registration:
           keycloak:
-            client-id: myclient
-            client-secret: BhG27c2607KowZP2QpzEv8q8bgil19eI
+            client-id: tasty_hour_backend
+            client-secret: H5BHCO0WFRP4Q4vcREe5t9zrezWuPbv3
             scope: openid
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
 
   data:
     rest:
@@ -41,6 +53,7 @@ server:
   port: 8080
 
 minio:
+  enabled: true
   url: http://localhost:9000
   username: minio
   password: minio123
@@ -59,11 +72,6 @@ logging:
           config: DEBUG
         context:
           annotation: DEBUG
-
-
-token:
-  signing:
-    key: basebasebasebasebasebasebasebasebasebasebasebasebasebasebasebase
 
 
 log4j:

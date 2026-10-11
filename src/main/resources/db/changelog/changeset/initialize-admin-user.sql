@@ -12,12 +12,3 @@ VALUES
 SELECT setval('users_id_seq', (SELECT MAX(id) FROM users));
 
 SELECT setval('passwords_id_seq', (SELECT MAX(id) FROM passwords));
-
-
-
-
-
-
-
-
-

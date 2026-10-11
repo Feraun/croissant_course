@@ -8,16 +8,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.UUID;
+
 public interface InstitutionRepository extends JpaRepository<InstitutionEntity, Long> {
 
-    @Query("""
-            SELECT COUNT(m) > 0 FROM InstitutionEntity i
-            JOIN i.manager m
-            WHERE i.id = :institutionId AND m.id = :managerId""")
-    boolean existsByIdAndManagerId(@Param("institutionId") Long institutionId,
-                                   @Param("managerId") Long managerId);
+    boolean existsByIdAndManagersId(Long id, UUID managersId);
 
-
+    //todo спецификация
     @Query("""
             SELECT ie FROM InstitutionEntity ie
             JOIN FETCH ie.categories
@@ -37,9 +34,10 @@ public interface InstitutionRepository extends JpaRepository<InstitutionEntity, 
 
     @Query("""
             SELECT ie FROM InstitutionEntity ie
-            WHERE ie.managerId = :managerId
+            JOIN ie.managers m
+            WHERE m.id = :managerId
             """)
-    Page<InstitutionEntity> searchInstitutionByManager(@Param("managerId") Long managerId,
+    Page<InstitutionEntity> searchInstitutionByManager(@Param("managerId") UUID managerId,
                                                      Pageable pageable);
 
     @NotNull

@@ -7,7 +7,6 @@ import com.crois.course.entity.OrderEntity;
 import com.crois.course.entity.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 
 import java.time.LocalDateTime;
 
@@ -22,7 +21,8 @@ public interface OrderMapper {
     OrderClientDTO createClientDTOFromEntity(OrderEntity orderEntity);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "user", source = "userEntity")
+    @Mapping(target = "user", ignore = true)
+    @Mapping(target = "userId", source = "userEntity.id")
     @Mapping(target = "box", source = "boxEntity")
     @Mapping(target = "createdAt", source = "localDateTime")
     @Mapping(target = "amount", source = "boxEntity.price")

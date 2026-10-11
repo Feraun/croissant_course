@@ -2,7 +2,6 @@ package com.crois.course.service.ManagerServices;
 
 import com.crois.course.dto.BoxDTO.BoxResponseDTO;
 import com.crois.course.dto.BoxDTO.CreateBoxDTO;
-import com.crois.course.dto.UserDTO.AuthUser;
 import com.crois.course.entity.BoxEntity;
 import com.crois.course.exceptions.YouNotHaveAccessException;
 import com.crois.course.mapper.BoxMapper;
@@ -13,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+
+import static com.crois.course.Utils.IdUtils.getIdFromAuthentication;
 
 @Service
 @AllArgsConstructor
@@ -25,9 +26,7 @@ public class ManagerBoxService {
 
     public CreateBoxDTO createBoxByManager(Long institutionId, CreateBoxDTO createBoxDTO, Authentication authentication){
 
-        AuthUser authUser = (AuthUser) authentication.getPrincipal();
-
-        if (institutionRepository.existsByIdAndManagerId(institutionId, authUser.getId())){
+        if (institutionRepository.existsByIdAndManagersId(institutionId, getIdFromAuthentication(authentication))){
             BoxEntity boxEntity = boxMapper.createEntityFromDtoForNewBox(
                     createBoxDTO,
                     institutionId);
@@ -41,10 +40,7 @@ public class ManagerBoxService {
     }
 
     public Page<BoxResponseDTO> getAllBox(Long institutionId, Long boxId, Authentication authentication, Pageable pageable){
-
-        AuthUser authUser = (AuthUser) authentication.getPrincipal();
-
-        return boxRepository.getBoxFromInstitutionByManager(institutionId, authUser.getId(), boxId, pageable)
+        return boxRepository.getBoxFromInstitutionByManager(institutionId, getIdFromAuthentication(authentication), boxId, pageable)
                 .map(boxMapper::createManagersDtoFromEntity);
     }
 }

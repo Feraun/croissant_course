@@ -1,7 +1,9 @@
 package com.crois.course.mapper;
 
 import com.crois.course.dto.InstitutionDTO.*;
-import com.crois.course.entity.*;
+import com.crois.course.entity.BoxEntity;
+import com.crois.course.entity.CategoryInstitutionEntity;
+import com.crois.course.entity.InstitutionEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -16,12 +18,11 @@ public interface InstitutionMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "boxes", ignore = true)
     @Mapping(target = "city", ignore = true)
-    @Mapping(target = "manager", ignore = true)
+    @Mapping(target = "managers", ignore = true)
     @Mapping(target = "logo", ignore = true)
     @Mapping(target = "categories", source = "categoryInstitutionEntityList")
     InstitutionEntity createEntityFromDTO(InstitutionRequestDTO dto,
                                           List<CategoryInstitutionEntity> categoryInstitutionEntityList,
-                                          Long managerId,
                                           LocalDateTime createdAt,
                                           UUID logoId,
                                           Long cityId
@@ -38,8 +39,9 @@ public interface InstitutionMapper {
     @Mapping(target = "logoId", source = "institution.logoId")
     InstitutionResponseClient createDtoForClientById(InstitutionEntity institution, List<BoxEntity> boxEntities);
 
+    //todo поправить маппинг названия города
     @Mapping(target = "cityName", source = "city.name")
-    InstitutionResponseDTO createDtoFromEntity( InstitutionEntity institution);
+    InstitutionResponseDTO createDtoFromEntity(InstitutionEntity institution);
 
 
     @Mapping(target = "id", ignore = true)
@@ -47,14 +49,13 @@ public interface InstitutionMapper {
     @Mapping(target = "logo", ignore = true)
     @Mapping(target = "logoId", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "manager", ignore = true)
+    @Mapping(target = "managers", ignore = true)
     @Mapping(target = "city", ignore = true)
     @Mapping(target = "categories", source = "categoryInstitutionEntityList")
     InstitutionEntity updateEntity(@MappingTarget InstitutionEntity institutionEntity,
                                    InstitutionRequestDTO dto,
                                    List<CategoryInstitutionEntity> categoryInstitutionEntityList,
-                                   Long managerId,
-                                   Long cityId
+                                   Long cityId // managerId удален
     );
 
     InstitutionResponseManagerForGetAll createManagerDtoFromEntity(InstitutionEntity institution);
